@@ -11,6 +11,6 @@ class Order(SQLModel, table=True):
         default_factory=lambda: datetime.now(timezone.utc),
     )
     end_date: datetime = Field()
-    customer_id: int = Field(foreign_key="customer.customer_id")
-    book_id: int = Field(foreign_key="book.book_id")
-    employee_id: int = Field(foreign_key="employee.employee_id")
+    customer_id: uuid.UUID = Field(foreign_key="customers.customer_id")
+    book_id: uuid.UUID = Field(foreign_key="books.book_id")
+    employee_id: uuid.UUID = Field(foreign_key="employees.employee_id")

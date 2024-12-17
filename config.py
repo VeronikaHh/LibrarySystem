@@ -15,3 +15,4 @@ class SystemConfig(BaseSettings):
     )
 
 system_config = SystemConfig()
+
