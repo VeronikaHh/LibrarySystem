@@ -14,3 +14,4 @@ class Order(SQLModel, table=True):
     customer_id: uuid.UUID = Field(foreign_key="customers.customer_id")
     book_id: uuid.UUID = Field(foreign_key="books.book_id")
     employee_id: uuid.UUID = Field(foreign_key="employees.employee_id")
+    is_returned: bool = Field(default=False)
