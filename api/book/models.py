@@ -2,6 +2,7 @@ import uuid
 
 from sqlmodel import Field, SQLModel
 
+
 class Book(SQLModel, table=True):
     __tablename__ = "books"
 
@@ -9,4 +10,5 @@ class Book(SQLModel, table=True):
     name: str = Field()
     author: str = Field()
     type: str = Field()
-    price: float = Field()
+    price: float = Field(gt=0)
+    quantity: int = Field(gt=0)
