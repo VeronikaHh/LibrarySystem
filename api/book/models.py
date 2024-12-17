@@ -10,3 +10,4 @@ class Book(SQLModel, table=True):
     author: str = Field()
     type: str = Field()
     price: float = Field()
+    quantity: int = Field()
