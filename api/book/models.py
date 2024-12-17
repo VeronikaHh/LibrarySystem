@@ -10,5 +10,5 @@ class Book(SQLModel, table=True):
     name: str = Field()
     author: str = Field()
     type: str = Field()
-    price: float = Field(gt = 0)
-    quantity: int = Field(gt = 0)
+    price: float = Field(gt=0)
+    quantity: int = Field(gt=0)
