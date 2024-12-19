@@ -7,8 +7,8 @@ class Book(SQLModel, table=True):
     __tablename__ = "books"
 
     book_id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
-    name: str = Field()
+    title: str = Field()
     author: str = Field()
-    type: str = Field()
+    genre: str = Field()
     price: float = Field(gt=0)
     quantity: int = Field(gt=0)
