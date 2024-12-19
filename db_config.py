@@ -1,5 +1,4 @@
 from collections.abc import Iterator
-from functools import lru_cache
 from pathlib import Path
 from typing import Annotated
 
@@ -52,7 +51,7 @@ def get_connection_string(database_config: Annotated[DatabaseConfig, Depends(get
 
 
 def get_database_engine(database_config: Annotated[DatabaseConfig, Depends(get_database_config)]) -> Engine:
-    return create_engine(get_connection_string(database_config), pool_size=database_config.pool_size)
+    return create_engine(get_connection_string(database_config))
 
 
 def get_database_session(engine: Annotated[Engine, Depends(get_database_engine)]) -> Iterator[Session]:

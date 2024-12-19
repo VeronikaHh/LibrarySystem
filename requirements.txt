@@ -3,3 +3,4 @@ pydantic_settings==2.7.0
 SQLAlchemy==2.0.36
 sqlmodel==0.0.22
 uvicorn==0.34.0
+alembic==1.14.0

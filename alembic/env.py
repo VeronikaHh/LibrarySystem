@@ -1,12 +1,14 @@
 from logging.config import fileConfig
 
+from alembic import context
 from sqlalchemy import engine_from_config
 from sqlalchemy import pool
 from sqlmodel import SQLModel
 
-import api
-from alembic import context
 from db_config import get_connection_string, get_database_config
+
+# import api module to load the model classes from all submodules
+import api
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -23,7 +25,6 @@ if config.config_file_name is not None:
 # for 'autogenerate' support
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
-import api
 target_metadata = SQLModel.metadata
 
 # other values from the config, defined by the needs of env.py,
