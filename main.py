@@ -1,6 +1,8 @@
 import uvicorn
 from fastapi import FastAPI
+
 from log_config import logger
+
 from api.book.router import router as book_router
 from api.customer.router import router as customer_router
 from api.employee.router import router as employee_router
@@ -12,10 +14,6 @@ app.include_router(book_router)
 app.include_router(customer_router)
 app.include_router(employee_router)
 app.include_router(order_router)
-
-# @app.get("/")
-# async def root():
-#     return {"message": "Hello World"}
 
 if __name__ == "__main__":
     logger.debug("Starting app")
