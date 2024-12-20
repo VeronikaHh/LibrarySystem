@@ -6,7 +6,7 @@ from fastapi import APIRouter, Depends
 from sqlmodel import Session, select
 
 from db_config import get_database_session
-from .models import Employee
+from .models import Employee, EmployeeUpdate
 
 router = APIRouter(prefix="/employees",tags=["Employee"])
 
@@ -32,7 +32,7 @@ async def create_employee(employee: Employee, session: Annotated[Session, Depend
     return db_employee
 
 @router.put("/{employee_id}", status_code=201)
-async def update_employee(employee_id: uuid.UUID, employee: Employee, session: Annotated[Session, Depends(get_database_session)]):
+async def update_employee(employee_id: uuid.UUID, employee: EmployeeUpdate, session: Annotated[Session, Depends(get_database_session)]):
     db_employee = session.get(Employee, employee_id)
     if db_employee is None:
         raise HTTPException()
