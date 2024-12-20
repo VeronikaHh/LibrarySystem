@@ -6,7 +6,7 @@ from fastapi import APIRouter, Depends
 from sqlmodel import Session, select
 
 from db_config import get_database_session
-from .models import Order
+from .models import Order, OrderUpdate
 
 router = APIRouter(prefix="/orders",tags=["Order"])
 
@@ -32,7 +32,7 @@ async def create_order(order: Order, session: Annotated[Session, Depends(get_dat
     return db_order
 
 @router.put("/{order_id}", status_code=201)
-async def update_order(order_id: uuid.UUID, order: Order, session: Annotated[Session, Depends(get_database_session)]):
+async def update_order(order_id: uuid.UUID, order: OrderUpdate, session: Annotated[Session, Depends(get_database_session)]):
     db_order = session.get(Order, order_id)
     if db_order is None:
         raise HTTPException()

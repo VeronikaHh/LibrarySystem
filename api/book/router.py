@@ -6,7 +6,7 @@ from fastapi import APIRouter, Depends
 from sqlmodel import Session, select
 
 from db_config import get_database_session
-from .models import Book
+from .models import Book, BookUpdate
 
 router = APIRouter(prefix="/books",tags=["Book"])
 
@@ -32,15 +32,10 @@ async def create_book(book: Book, session: Annotated[Session, Depends(get_databa
     return db_book
 
 @router.put("/{book_id}", status_code=201)
-async def update_book(book_id: uuid.UUID, book: Book, session: Annotated[Session, Depends(get_database_session)]):
+async def update_book(book_id: uuid.UUID, book: BookUpdate, session: Annotated[Session, Depends(get_database_session)]):
     db_book = session.get(Book, book_id)
     if db_book is None:
         raise HTTPException()
-    # db_book.title = book.title
-    # db_book.author = book.author
-    # db_book.genre = book.genre
-    # db_book.price = book.price
-    # db_book.quantity = book.quantity
     db_book.sqlmodel_update(book.model_dump())
     session.commit()
     session.refresh(db_book)
