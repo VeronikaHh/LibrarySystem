@@ -5,7 +5,7 @@ from fastapi import status
 from api.exceptions import LibraryApiException
 
 
-class BookError(LibraryApiException):
+class BookException(LibraryApiException):
 
     def __init__(
             self,
@@ -19,7 +19,7 @@ class BookError(LibraryApiException):
         super(LibraryApiException, self).__init__(message, error_name, status_code)
 
 
-class BookNotFoundError(BookError):
+class BookNotFoundException(BookException):
     def __init__(
             self,
             book_id: uuid.UUID,
@@ -27,10 +27,10 @@ class BookNotFoundError(BookError):
             status_code: int = status.HTTP_404_NOT_FOUND,
     ) -> None:
         message = f"{message}, id = [{str(book_id)}]"
-        super(BookError, self).__init__(message=message, status_code=status_code)
+        super(BookException, self).__init__(message=message, status_code=status_code)
 
 
-class InvalidBookDataError(BookError):
+class InvalidBookDataException(BookException):
     def __init__(
             self,
             book_id: uuid.UUID,
@@ -41,4 +41,4 @@ class InvalidBookDataError(BookError):
         message = f"{message}, book id = [{str(book_id)}]"
         if error:
             message = f"{message}, error = [{str(error)}]"
-        super(BookError, self).__init__(message=message, status_code=status_code)
+        super(BookException, self).__init__(message=message, status_code=status_code)

@@ -5,7 +5,7 @@ from fastapi import status
 from api.exceptions import LibraryApiException
 
 
-class CustomerError(LibraryApiException):
+class CustomerException(LibraryApiException):
 
     def __init__(
             self,
@@ -19,7 +19,7 @@ class CustomerError(LibraryApiException):
         super(LibraryApiException, self).__init__(message, error_name, status_code)
 
 
-class CustomerNotFoundError(CustomerError):
+class CustomerNotFoundException(CustomerException):
     def __init__(
             self,
             customer_id: uuid.UUID,
@@ -27,10 +27,10 @@ class CustomerNotFoundError(CustomerError):
             status_code: int = status.HTTP_404_NOT_FOUND,
     ) -> None:
         message = f"{message}, id = [{str(customer_id)}]"
-        super(CustomerError, self).__init__(message=message, status_code=status_code)
+        super(CustomerException, self).__init__(message=message, status_code=status_code)
 
 
-class InvalidCustomerDataError(CustomerError):
+class InvalidCustomerDataException(CustomerException):
     def __init__(
             self,
             customer_id: uuid.UUID,
@@ -41,4 +41,4 @@ class InvalidCustomerDataError(CustomerError):
         message = f"{message}, customer id = [{str(customer_id)}]"
         if error:
             message = f"{message}, error = [{str(error)}]"
-        super(CustomerError, self).__init__(message=message, status_code=status_code)
+        super(CustomerException, self).__init__(message=message, status_code=status_code)

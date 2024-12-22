@@ -5,7 +5,7 @@ from fastapi import status
 from api.exceptions import LibraryApiException
 
 
-class OrderError(LibraryApiException):
+class OrderException(LibraryApiException):
 
     def __init__(
             self,
@@ -19,7 +19,7 @@ class OrderError(LibraryApiException):
         super(LibraryApiException, self).__init__(message, error_name, status_code)
 
 
-class OrderNotFoundError(OrderError):
+class OrderNotFoundException(OrderException):
     def __init__(
             self,
             order_id: uuid.UUID,
@@ -27,10 +27,10 @@ class OrderNotFoundError(OrderError):
             status_code: int = status.HTTP_404_NOT_FOUND,
     ) -> None:
         message = f"{message}, id = [{str(order_id)}]"
-        super(OrderError, self).__init__(message=message, status_code=status_code)
+        super(OrderException, self).__init__(message=message, status_code=status_code)
 
 
-class InvalidOrderDataError(OrderError):
+class InvalidOrderDataException(OrderException):
     def __init__(
             self,
             order_id: uuid.UUID,
@@ -41,4 +41,4 @@ class InvalidOrderDataError(OrderError):
         message = f"{message}, order id = [{str(order_id)}]"
         if error:
             message = f"{message}, error = [{str(error)}]"
-        super(OrderError, self).__init__(message=message, status_code=status_code)
+        super(OrderException, self).__init__(message=message, status_code=status_code)

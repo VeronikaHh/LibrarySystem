@@ -5,7 +5,7 @@ from fastapi import status
 from api.exceptions import LibraryApiException
 
 
-class EmployeeError(LibraryApiException):
+class EmployeeException(LibraryApiException):
 
     def __init__(
             self,
@@ -19,7 +19,7 @@ class EmployeeError(LibraryApiException):
         super(LibraryApiException, self).__init__(message, error_name, status_code)
 
 
-class EmployeeNotFoundError(EmployeeError):
+class EmployeeNotFoundException(EmployeeException):
     def __init__(
             self,
             employee_id: uuid.UUID,
@@ -27,10 +27,10 @@ class EmployeeNotFoundError(EmployeeError):
             status_code: int = status.HTTP_404_NOT_FOUND,
     ) -> None:
         message = f"{message}, id = [{str(employee_id)}]"
-        super(EmployeeError, self).__init__(message=message, status_code=status_code)
+        super(EmployeeException, self).__init__(message=message, status_code=status_code)
 
 
-class InvalidEmployeeDataError(EmployeeError):
+class InvalidEmployeeDataException(EmployeeException):
     def __init__(
             self,
             employee_id: uuid.UUID,
@@ -41,4 +41,4 @@ class InvalidEmployeeDataError(EmployeeError):
         message = f"{message}, employee id = [{str(employee_id)}]"
         if error:
             message = f"{message}, error = [{str(error)}]"
-        super(EmployeeError, self).__init__(message=message, status_code=status_code)
+        super(EmployeeException, self).__init__(message=message, status_code=status_code)
