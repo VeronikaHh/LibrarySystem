@@ -1,11 +1,16 @@
+import logging
 from pathlib import Path
+
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 ROOT_DIR = Path(__file__).parent
 SERVICE_NAME = "LIBRARY_MANAGEMENT_API_"
+DATETIME_FORMAT = "%Y-%m-%d %H:%M:%S"
+LOGGING_FORMAT = "%(asctime)s %(levelname)s %(message)s"
+
 
 class SystemConfig(BaseSettings):
-    log_level: str = "INFO"
+    log_level = logging.INFO
 
     model_config = SettingsConfigDict(
         env_prefix=SERVICE_NAME + "SYSTEM_",
@@ -14,5 +19,5 @@ class SystemConfig(BaseSettings):
         extra="ignore",
     )
 
-system_config = SystemConfig()
 
+system_config = SystemConfig()

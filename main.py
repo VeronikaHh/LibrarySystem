@@ -7,7 +7,7 @@ from api.customer.router import router as customer_router
 from api.employee.router import router as employee_router
 from api.exceptions import LibraryApiException
 from api.order.router import router as order_router
-from log_config import logger
+from logger_config import logger
 
 app = FastAPI()
 
