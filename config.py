@@ -10,7 +10,7 @@ LOGGING_FORMAT = "%(asctime)s %(levelname)s %(message)s"
 
 
 class SystemConfig(BaseSettings):
-    log_level = logging.INFO
+    log_level: int = logging.INFO
 
     model_config = SettingsConfigDict(
         env_prefix=SERVICE_NAME + "SYSTEM_",
