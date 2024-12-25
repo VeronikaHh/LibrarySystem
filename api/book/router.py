@@ -3,61 +3,37 @@ from typing import Annotated
 
 from fastapi import APIRouter, Depends
 from fastapi import status
-from sqlalchemy.exc import IntegrityError
-from sqlmodel import Session, select
 
-from db_config import get_database_session
-from .exceptions import BookNotFoundException, InvalidBookDataException
-from .models import Book, BookCreateUpdate
+from .dal import BookDataAccessLayer
+from .models import BookCreateUpdate, Book
 
 router = APIRouter(prefix="/books", tags=["Book"])
 
 
 @router.get("", status_code=status.HTTP_200_OK)
-async def get_books(session: Annotated[Session, Depends(get_database_session)]):
-    db_books = session.exec(select(Book)).all()
-    return db_books
+async def get_books(book_dal: Annotated[BookDataAccessLayer, Depends()]) -> list[Book]:
+    return list(book_dal.get_all_books())
 
 
 @router.get("/{book_id}", status_code=status.HTTP_200_OK)
-async def get_book_by_id(book_id: uuid.UUID, session: Annotated[Session, Depends(get_database_session)]):
-    db_book = session.get(Book, book_id)
-    if db_book is None:
-        raise BookNotFoundException(book_id=book_id)
-    return db_book
+async def get_book_by_id(book_id: uuid.UUID, book_dal: Annotated[BookDataAccessLayer, Depends()]) -> Book:
+    return book_dal.get_book_by_id(book_id=book_id)
 
 
 @router.post("", status_code=status.HTTP_201_CREATED)
-async def create_book(book: BookCreateUpdate, session: Annotated[Session, Depends(get_database_session)]):
-    db_book = Book(**book.model_dump())
-    try:
-        session.add(db_book)
-        session.commit()
-        session.refresh(db_book)
-    except IntegrityError as err:
-        raise InvalidBookDataException(book_id=book.book_id, error=str(err))
-    return db_book
+async def create_book(book: BookCreateUpdate, book_dal: Annotated[BookDataAccessLayer, Depends()]) -> Book:
+    return book_dal.create_book(book=book)
 
 
 @router.put("/{book_id}", status_code=status.HTTP_200_OK)
-async def update_book(book_id: uuid.UUID, book: BookCreateUpdate, session: Annotated[Session, Depends(get_database_session)]):
-    db_book = session.get(Book, book_id)
-    if db_book is None:
-        raise BookNotFoundException(book_id=book_id)
-    try:
-        db_book.sqlmodel_update(book.model_dump())
-        session.commit()
-        session.refresh(db_book)
-    except IntegrityError as err:
-        raise InvalidBookDataException(book_id=book.book_id, error=str(err))
-    return db_book
+async def update_book(
+        book_id: uuid.UUID,
+        book: BookCreateUpdate,
+        book_dal: Annotated[BookDataAccessLayer, Depends()],
+) -> Book:
+    return book_dal.update_book(book_id=book_id, book=book)
 
 
 @router.delete("/{book_id}", status_code=status.HTTP_204_NO_CONTENT)
-async def delete_book(book_id: uuid.UUID, session: Annotated[Session, Depends(get_database_session)]):
-    db_book = session.get(Book, book_id)
-    if db_book is None:
-        raise BookNotFoundException(book_id=book_id)
-    session.delete(db_book)
-    session.commit()
-    return {"ok": True}
+async def delete_book(book_id: uuid.UUID, book_dal: Annotated[BookDataAccessLayer, Depends()]) -> None:
+    return book_dal.delete_book(book_id=book_id)
