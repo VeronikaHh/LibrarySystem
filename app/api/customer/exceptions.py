@@ -2,7 +2,7 @@ import uuid
 
 from fastapi import status
 
-from api.exceptions import LibraryApiException
+from app.api.exceptions import LibraryApiException
 
 
 class CustomerException(LibraryApiException):

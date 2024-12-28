@@ -13,7 +13,7 @@ from sqlmodel import (
     create_engine,
 )
 
-from config import (
+from .config import (
     ROOT_DIR,
     SERVICE_NAME,
 )

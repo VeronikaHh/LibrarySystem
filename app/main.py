@@ -2,12 +2,12 @@ import uvicorn
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 
-from api.book.router import router as book_router
-from api.customer.router import router as customer_router
-from api.employee.router import router as employee_router
-from api.exceptions import LibraryApiException
-from api.order.router import router as order_router
-from logger_config import logger
+from app.api.book.router import router as book_router
+from app.api.customer.router import router as customer_router
+from app.api.employee.router import router as employee_router
+from app.api.exceptions import LibraryApiException
+from app.api.order.router import router as order_router
+from .logger_config import logger
 
 app = FastAPI()
 

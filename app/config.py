@@ -3,7 +3,7 @@ from pathlib import Path
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-ROOT_DIR = Path(__file__).parent
+ROOT_DIR = Path(__file__).parent.parent
 SERVICE_NAME = "LIBRARY_MANAGEMENT_API_"
 DATETIME_FORMAT = "%Y-%m-%d %H:%M:%S"
 LOGGING_FORMAT = "%(asctime)s %(levelname)s %(message)s"
