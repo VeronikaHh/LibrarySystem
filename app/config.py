@@ -14,7 +14,7 @@ class SystemConfig(BaseSettings):
 
     model_config = SettingsConfigDict(
         env_prefix=SERVICE_NAME + "SYSTEM_",
-        env_file=ROOT_DIR / Path(".env"),
+        env_file=ROOT_DIR / Path("../.env"),
         env_file_encoding="utf-8",
         extra="ignore",
     )

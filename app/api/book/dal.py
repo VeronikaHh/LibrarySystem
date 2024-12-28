@@ -5,7 +5,7 @@ from fastapi import Depends
 from sqlalchemy.exc import IntegrityError
 from sqlmodel import Session, select
 
-from db_config import get_database_session
+from app.db_config import get_database_session
 from .exceptions import BookNotFoundException, InvalidBookDataException
 from .models import Book, BookCreateUpdate
 

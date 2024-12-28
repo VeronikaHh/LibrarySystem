@@ -13,7 +13,7 @@ from sqlmodel import (
     create_engine,
 )
 
-from config import (
+from .config import (
     ROOT_DIR,
     SERVICE_NAME,
 )
@@ -31,7 +31,7 @@ class DatabaseConfig(BaseSettings):
 
     model_config = SettingsConfigDict(
         env_prefix=SERVICE_NAME + "DB_",
-        env_file=ROOT_DIR / Path(".env"),
+        env_file=ROOT_DIR / Path("../.env"),
         env_file_encoding="utf-8",
         extra="ignore",
     )
