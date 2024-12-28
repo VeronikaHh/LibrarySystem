@@ -19,7 +19,7 @@ class CustomerDataAccessLayer:
         return db_customers
 
     def get_customer_by_id(self, customer_id: uuid.UUID) -> Customer:
-        statement = select(Customer).where(Customer.id == customer_id)
+        statement = select(Customer).where(Customer.customer_id == customer_id)
         db_customer = self.__session.exec(statement).one_or_none()
         if db_customer is None:
             raise CustomerNotFoundException(customer_id=customer_id)

@@ -19,7 +19,7 @@ class EmployeeDataAccessLayer:
         return db_employees
 
     def get_employee_by_id(self, employee_id: uuid.UUID) -> Employee:
-        statement = select(Employee).where(Employee.id == employee_id)
+        statement = select(Employee).where(Employee.employee_id == employee_id)
         db_employee = self.__session.exec(statement).one_or_none()
         if db_employee is None:
             raise EmployeeNotFoundException(employee_id=employee_id)
