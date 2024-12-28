@@ -19,7 +19,7 @@ class OrderDataAccessLayer:
         return db_orders
 
     def get_order_by_id(self, order_id: uuid.UUID) -> Order:
-        statement = select(Order).where(Order.id == order_id)
+        statement = select(Order).where(Order.order_id == order_id)
         db_order = self.__session.exec(statement).one_or_none()
         if db_order is None:
             raise OrderNotFoundException(order_id=order_id)

@@ -19,7 +19,7 @@ class BookDataAccessLayer:
         return db_books
 
     def get_book_by_id(self, book_id: uuid.UUID) -> Book:
-        statement = select(Book).where(Book.id == book_id)
+        statement = select(Book).where(Book.book_id == book_id)
         db_book = self.__session.exec(statement).one_or_none()
         if db_book is None:
             raise BookNotFoundException(book_id=book_id)
