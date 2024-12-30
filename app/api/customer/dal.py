@@ -7,7 +7,7 @@ from sqlmodel import Session, select
 
 from app.db_config import get_database_session
 from .exceptions import CustomerNotFoundException, InvalidCustomerDataException
-from .models import Customer, CustomerCreateUpdate
+from .models import Customer, CustomerCreate, CustomerUpdate
 
 
 class CustomerDataAccessLayer:
@@ -25,7 +25,7 @@ class CustomerDataAccessLayer:
             raise CustomerNotFoundException(customer_id=customer_id)
         return db_customer
 
-    def create_customer(self, customer: CustomerCreateUpdate) -> Customer:
+    def create_customer(self, customer: CustomerCreate) -> Customer:
         db_customer = Customer(**customer.model_dump())
         try:
             self.__session.add(db_customer)
@@ -35,10 +35,10 @@ class CustomerDataAccessLayer:
             raise InvalidCustomerDataException(customer_id=customer.customer_id, error=str(err))
         return db_customer
 
-    def update_customer(self, customer_id: uuid.UUID, customer: CustomerCreateUpdate) -> Customer:
+    def update_customer(self, customer_id: uuid.UUID, customer: CustomerUpdate) -> Customer:
         db_customer = self.get_customer_by_id(customer_id)
         try:
-            db_customer.sqlmodel_update(customer.model_dump())
+            db_customer.sqlmodel_update(customer.model_dump(exclude_none=True))
             self.__session.commit()
             self.__session.refresh(db_customer)
         except IntegrityError as err:

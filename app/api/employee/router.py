@@ -5,7 +5,7 @@ from fastapi import APIRouter, Depends
 from fastapi import status
 
 from .dal import EmployeeDataAccessLayer
-from .models import Employee, EmployeeCreateUpdate
+from .models import Employee, EmployeeCreate, EmployeeUpdate
 
 router = APIRouter(prefix="/employees", tags=["Employee"])
 
@@ -22,7 +22,7 @@ async def get_employee_by_id(employee_id: uuid.UUID,
 
 
 @router.post("", status_code=status.HTTP_201_CREATED)
-async def create_employee(employee: EmployeeCreateUpdate,
+async def create_employee(employee: EmployeeCreate,
                           employee_dal: Annotated[EmployeeDataAccessLayer, Depends()]) -> Employee:
     return employee_dal.create_employee(employee=employee)
 
@@ -30,7 +30,7 @@ async def create_employee(employee: EmployeeCreateUpdate,
 @router.put("/{employee_id}", status_code=status.HTTP_200_OK)
 async def update_employee(
         employee_id: uuid.UUID,
-        employee: EmployeeCreateUpdate,
+        employee: EmployeeUpdate,
         employee_dal: Annotated[EmployeeDataAccessLayer, Depends()],
 ) -> Employee:
     return employee_dal.update_employee(employee_id=employee_id, employee=employee)

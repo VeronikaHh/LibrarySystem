@@ -8,6 +8,7 @@ from sqlmodel import SQLModel
 from app.db_config import get_connection_string, get_database_config
 
 # import api module to load the model classes from all submodules
+import app.api
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
