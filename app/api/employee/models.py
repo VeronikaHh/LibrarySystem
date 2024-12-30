@@ -13,8 +13,8 @@ class EmployeeUpdate(SQLModel):
 
 class EmployeeCreate(SQLModel):
     name: str = Field()
-    email: str = Field()
-    phone_number: str = Field()
+    email: str = Field(unique=True)
+    phone_number: str = Field(unique=True)
     address: str = Field()
     is_admin: bool = Field(default=False)
 

@@ -10,8 +10,8 @@ class CustomerUpdate(SQLModel):
 
 class CustomerCreate(SQLModel):
     name: str = Field()
-    email: str = Field()
-    phone_number: str = Field()
+    email: str = Field(unique=True)
+    phone_number: str = Field(unique=True)
     is_ower: bool = Field(default=False)
 
 
