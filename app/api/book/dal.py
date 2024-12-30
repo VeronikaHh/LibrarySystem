@@ -7,7 +7,7 @@ from sqlmodel import Session, select
 
 from app.db_config import get_database_session
 from .exceptions import BookNotFoundException, InvalidBookDataException
-from .models import Book, BookCreateUpdate
+from .models import Book, BookCreate, BookUpdate
 
 
 class BookDataAccessLayer:
@@ -25,7 +25,7 @@ class BookDataAccessLayer:
             raise BookNotFoundException(book_id=book_id)
         return db_book
 
-    def create_book(self, book: BookCreateUpdate) -> Book:
+    def create_book(self, book: BookCreate) -> Book:
         db_book = Book(**book.model_dump())
         try:
             self.__session.add(db_book)
@@ -35,10 +35,10 @@ class BookDataAccessLayer:
             raise InvalidBookDataException(book_id=book.book_id, error=str(err))
         return db_book
 
-    def update_book(self, book_id: uuid.UUID, book: BookCreateUpdate) -> Book:
+    def update_book(self, book_id: uuid.UUID, book: BookUpdate) -> Book:
         db_book = self.get_book_by_id(book_id)
         try:
-            db_book.sqlmodel_update(book.model_dump())
+            db_book.sqlmodel_update(book.model_dump(exclude_none=True))
             self.__session.commit()
             self.__session.refresh(db_book)
         except IntegrityError as err:

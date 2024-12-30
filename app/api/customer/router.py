@@ -5,7 +5,7 @@ from fastapi import APIRouter, Depends
 from fastapi import status
 
 from .dal import CustomerDataAccessLayer
-from .models import Customer, CustomerCreateUpdate
+from .models import Customer, CustomerCreate, CustomerUpdate
 
 router = APIRouter(prefix="/customers", tags=["Customer"])
 
@@ -22,7 +22,7 @@ async def get_customer_by_id(customer_id: uuid.UUID,
 
 
 @router.post("", status_code=status.HTTP_201_CREATED)
-async def create_customer(customer: CustomerCreateUpdate,
+async def create_customer(customer: CustomerCreate,
                           customer_dal: Annotated[CustomerDataAccessLayer, Depends()]) -> Customer:
     return customer_dal.create_customer(customer=customer)
 
@@ -30,7 +30,7 @@ async def create_customer(customer: CustomerCreateUpdate,
 @router.put("/{customer_id}", status_code=status.HTTP_200_OK)
 async def update_customer(
         customer_id: uuid.UUID,
-        customer: CustomerCreateUpdate,
+        customer: CustomerUpdate,
         customer_dal: Annotated[CustomerDataAccessLayer, Depends()],
 ) -> Customer:
     return customer_dal.update_customer(customer_id=customer_id, customer=customer)

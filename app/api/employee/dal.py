@@ -7,7 +7,7 @@ from sqlmodel import Session, select
 
 from app.db_config import get_database_session
 from .exceptions import EmployeeNotFoundException, InvalidEmployeeDataException
-from .models import Employee, EmployeeCreateUpdate
+from .models import Employee, EmployeeCreate, EmployeeUpdate
 
 
 class EmployeeDataAccessLayer:
@@ -25,7 +25,7 @@ class EmployeeDataAccessLayer:
             raise EmployeeNotFoundException(employee_id=employee_id)
         return db_employee
 
-    def create_employee(self, employee: EmployeeCreateUpdate) -> Employee:
+    def create_employee(self, employee: EmployeeCreate) -> Employee:
         db_employee = Employee(**employee.model_dump())
         try:
             self.__session.add(db_employee)
@@ -35,10 +35,10 @@ class EmployeeDataAccessLayer:
             raise InvalidEmployeeDataException(employee_id=employee.employee_id, error=str(err))
         return db_employee
 
-    def update_employee(self, employee_id: uuid.UUID, employee: EmployeeCreateUpdate) -> Employee:
+    def update_employee(self, employee_id: uuid.UUID, employee: EmployeeUpdate) -> Employee:
         db_employee = self.get_employee_by_id(employee_id)
         try:
-            db_employee.sqlmodel_update(employee.model_dump())
+            db_employee.sqlmodel_update(employee.model_dump(exclude_none=True))
             self.__session.commit()
             self.__session.refresh(db_employee)
         except IntegrityError as err:

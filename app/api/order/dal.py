@@ -38,7 +38,7 @@ class OrderDataAccessLayer:
     def update_order(self, order_id: uuid.UUID, order: OrderUpdate) -> Order:
         db_order = self.get_order_by_id(order_id)
         try:
-            db_order.sqlmodel_update(order.model_dump())
+            db_order.sqlmodel_update(order.model_dump(exclude_none=True))
             self.__session.commit()
             self.__session.refresh(db_order)
         except IntegrityError as err:

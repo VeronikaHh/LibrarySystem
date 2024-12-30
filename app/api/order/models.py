@@ -5,8 +5,8 @@ from sqlmodel import Field, SQLModel
 
 
 class OrderUpdate(SQLModel):
-    end_date: datetime = Field(default_factory=lambda: datetime.now(timezone.utc) + timedelta(days=90))
-    is_returned: bool = Field(default=False)
+    end_date: datetime | None = Field(default_factory=lambda: datetime.now(timezone.utc) + timedelta(days=90))
+    is_returned: bool | None= Field(default=False)
 
 
 class OrderCreate(OrderUpdate):
