@@ -1,10 +1,11 @@
 from .dal import BookDataAccessLayer
 from .exceptions import BookNotFoundException, InvalidBookDataException
-from .models import Book, BookCreateUpdate
+from .models import Book, BookCreate, BookUpdate
 
 __all__ = [
     "Book",
-    "BookCreateUpdate",
+    "BookCreate",
+    "BookUpdate",
     "BookDataAccessLayer",
     "InvalidBookDataException",
     "BookNotFoundException",

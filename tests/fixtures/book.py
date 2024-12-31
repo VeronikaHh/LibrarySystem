@@ -1,8 +1,7 @@
 import pytest
 from sqlmodel import Session
 
-from app.api.book import BookCreateUpdate
-from app.api.book import Book, BookDataAccessLayer
+from app.api.book import Book, BookCreate, BookDataAccessLayer
 
 
 @pytest.fixture
@@ -24,5 +23,6 @@ def books(books_dal: BookDataAccessLayer) -> list[Book]:
     return sample_books
 
 @pytest.fixture
-def create_book_request(books_dal: BookDataAccessLayer) -> Book:
+def create_book_request() -> Book:
     return Book(title="Test Book", author="Test Author", genre="Drama", price=12.99, quantity=3)
+
