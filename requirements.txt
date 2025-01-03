@@ -1,6 +1,7 @@
 fastapi==0.115.6
 pydantic_settings==2.7.0
+pytest==8.3.4
 SQLAlchemy==2.0.36
 sqlmodel==0.0.22
+testcontainers==4.9.0
 uvicorn==0.34.0
-alembic==1.14.0
