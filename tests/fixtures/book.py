@@ -12,6 +12,7 @@ def books_dal(
         session=test_database_session,
     )
 
+
 @pytest.fixture
 def books(books_dal: BookDataAccessLayer) -> list[Book]:
     sample_books = [
@@ -22,7 +23,7 @@ def books(books_dal: BookDataAccessLayer) -> list[Book]:
         books_dal.create_book(book)
     return sample_books
 
-@pytest.fixture
-def create_book_request() -> Book:
-    return Book(title="Test Book", author="Test Author", genre="Drama", price=12.99, quantity=3)
 
+@pytest.fixture
+def create_book_request() -> BookCreate:
+    return BookCreate(title="Test Book", author="Test Author", genre="Drama", price=12.99, quantity=3)

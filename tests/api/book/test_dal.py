@@ -2,7 +2,7 @@ import uuid
 
 import pytest
 
-from app.api.book import Book, BookUpdate, BookDataAccessLayer, BookNotFoundException
+from app.api.book import Book, BookUpdate, BookDataAccessLayer, BookNotFoundException, BookCreate
 
 
 def test_get_all_books(books_dal: BookDataAccessLayer, books: list[Book]) -> None:
@@ -28,14 +28,14 @@ def test_get_book_by_id_not_found(books_dal: BookDataAccessLayer, books: list[Bo
         books_dal.get_book_by_id(uuid.uuid4())
 
 
-def test_create_book(books_dal: BookDataAccessLayer, create_book_request: Book) -> None:
+def test_create_book(books_dal: BookDataAccessLayer, create_book_request: BookCreate) -> None:
     created_book = books_dal.create_book(book=create_book_request)
     assert created_book is not None
     assert created_book.title == create_book_request.title
     assert created_book.author == create_book_request.author
 
 
-def test_update_book(books_dal: BookDataAccessLayer, books: list[Book]):
+def test_update_book(books_dal: BookDataAccessLayer, books: list[Book]) -> None:
     updated_book = books_dal.update_book(book_id=books[0].book_id, book=BookUpdate(title="Updated title"))
     assert updated_book.title == "Updated title"
 
