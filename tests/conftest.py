@@ -33,13 +33,14 @@ def test_database_config(request: pytest.FixtureRequest) -> DatabaseConfig:
 
     return database_config
 
-@pytest.fixture
+
+@pytest.fixture(scope="session")
 def test_database_engine(test_database_config: DatabaseConfig) -> Engine:
     from app.db_config import get_database_engine
     return get_database_engine(test_database_config)
 
 
-@pytest.fixture
+@pytest.fixture(scope="session")
 def test_database_session(test_database_engine: Engine) -> Iterable[Session]:
     from app.db_config import get_database_session
     yield from get_database_session(test_database_engine)
@@ -56,4 +57,5 @@ def test_client(test_database_config: DatabaseConfig) -> TestClient:
 
 pytest_plugins = [
     "tests.fixtures.book",
+    "tests.fixtures.customer",
 ]

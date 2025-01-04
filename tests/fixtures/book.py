@@ -4,7 +4,7 @@ from sqlmodel import Session
 from app.api.book import Book, BookCreate, BookDataAccessLayer
 
 
-@pytest.fixture
+@pytest.fixture(scope="session")
 def books_dal(
         test_database_session: Session,
 ) -> BookDataAccessLayer:
@@ -13,7 +13,7 @@ def books_dal(
     )
 
 
-@pytest.fixture
+@pytest.fixture(scope="module")
 def books(books_dal: BookDataAccessLayer) -> list[Book]:
     sample_books = [
         Book(title="Book One", author="Author A", genre="Fiction", price=19.99, quantity=1),
@@ -24,6 +24,6 @@ def books(books_dal: BookDataAccessLayer) -> list[Book]:
     return sample_books
 
 
-@pytest.fixture
+@pytest.fixture(scope="module")
 def create_book_request() -> BookCreate:
     return BookCreate(title="Test Book", author="Test Author", genre="Drama", price=12.99, quantity=3)
