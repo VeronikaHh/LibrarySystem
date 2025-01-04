@@ -2,8 +2,13 @@ import uuid
 
 import pytest
 
-from app.api.employee import Employee, EmployeeUpdate, EmployeeDataAccessLayer, EmployeeNotFoundException, \
-    EmployeeCreate
+from app.api.employee import (
+    Employee,
+    EmployeeUpdate,
+    EmployeeDataAccessLayer,
+    EmployeeNotFoundException,
+    EmployeeCreate,
+)
 
 
 def test_get_all_employees(employees_dal: EmployeeDataAccessLayer, employees: list[Employee]) -> None:
