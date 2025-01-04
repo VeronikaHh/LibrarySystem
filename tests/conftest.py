@@ -58,4 +58,5 @@ def test_client(test_database_config: DatabaseConfig) -> TestClient:
 pytest_plugins = [
     "tests.fixtures.book",
     "tests.fixtures.customer",
+    "tests.fixtures.employee",
 ]
