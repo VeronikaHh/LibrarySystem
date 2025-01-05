@@ -59,4 +59,5 @@ pytest_plugins = [
     "tests.fixtures.book",
     "tests.fixtures.customer",
     "tests.fixtures.employee",
+    "tests.fixtures.order",
 ]
