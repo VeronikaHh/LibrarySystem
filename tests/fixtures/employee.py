@@ -18,9 +18,27 @@ def employees_dal(
 @pytest.fixture(scope="module")
 def employees(employees_dal: EmployeeDataAccessLayer) -> list[Employee]:
     sample_employees = [
-        Employee(name="Admin Employee", email=str(uuid.uuid4()), phone_number=str(uuid.uuid4()), address = "Employee One address", is_admin=True),
-        Employee(name="Employee One", email=str(uuid.uuid4()), phone_number=str(uuid.uuid4()), address = "Employee One address", is_admin=False),
-        Employee(name="Employee Two", email=str(uuid.uuid4()), phone_number=str(uuid.uuid4()), address = "Employee One address", is_admin=False),
+        Employee(
+            name="Admin Employee",
+            email=str(uuid.uuid4()),
+            phone_number=str(uuid.uuid4()),
+            address = "Employee One address",
+            is_admin=True,
+        ),
+        Employee(
+            name="Employee One",
+            email=str(uuid.uuid4()),
+            phone_number=str(uuid.uuid4()),
+            address = "Employee One address",
+            is_admin=False,
+        ),
+        Employee(
+            name="Employee Two",
+            email=str(uuid.uuid4()),
+            phone_number=str(uuid.uuid4()),
+            address = "Employee One address",
+            is_admin=False,
+        ),
     ]
     for employee in sample_employees:
         employees_dal.create_employee(employee)
@@ -29,4 +47,10 @@ def employees(employees_dal: EmployeeDataAccessLayer) -> list[Employee]:
 
 @pytest.fixture(scope="module")
 def create_employee_request() -> EmployeeCreate:
-    return EmployeeCreate(name="Test Employee", email=str(uuid.uuid4()), phone_number=str(uuid.uuid4()), address = "Test Employee address", is_admin=False)
+    return EmployeeCreate(
+        name="Test Employee",
+        email=str(uuid.uuid4()),
+        phone_number=str(uuid.uuid4()),
+        address = "Test Employee address",
+        is_admin=False,
+    )

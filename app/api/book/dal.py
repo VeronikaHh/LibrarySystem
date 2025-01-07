@@ -11,12 +11,11 @@ from .models import Book, BookCreate, BookUpdate
 
 
 class BookDataAccessLayer:
-    def __init__(self, session: Annotated[Session, Depends(get_database_session)]):
+    def __init__(self, session: Annotated[Session, Depends(get_database_session)]) -> None:
         self.__session = session
 
     def get_all_books(self) -> Sequence[Book]:
-        db_books = self.__session.exec(select(Book)).all()
-        return db_books
+        return self.__session.exec(select(Book)).all()
 
     def get_book_by_id(self, book_id: uuid.UUID) -> Book:
         statement = select(Book).where(Book.book_id == book_id)
@@ -52,4 +51,3 @@ class BookDataAccessLayer:
             self.__session.commit()
         except IntegrityError as err:
             raise InvalidBookDataException(book_id=book_id, error=str(err))
-        return None
