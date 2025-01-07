@@ -9,7 +9,7 @@ from app.api.book.constants import Genres
 class BookUpdate(SQLModel):
     title: str | None = None
     author: str | None = None
-    genre: Genres | None = Field(sa_column=Column(VARCHAR, default=None))
+    genre: Genres | None = None
     price: float | None = Field(default=None, ge=0)
     quantity: int | None = Field(default=None, ge=0)
 

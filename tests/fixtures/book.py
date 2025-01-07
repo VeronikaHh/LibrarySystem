@@ -1,8 +1,7 @@
 import pytest
 from sqlmodel import Session
 
-from app.api.book import Book, BookCreate, BookDataAccessLayer
-
+from app.api.book import Book, BookCreate, BookDataAccessLayer, Genres
 
 @pytest.fixture(scope="session")
 def books_dal(
@@ -16,8 +15,8 @@ def books_dal(
 @pytest.fixture(scope="module")
 def books(books_dal: BookDataAccessLayer) -> list[Book]:
     sample_books = [
-        Book(title="Book One", author="Author A", genre="Fiction", price=19.99, quantity=1),
-        Book(title="Book Two", author="Author B", genre="Non-Fiction", price=25.99, quantity=3),
+        Book(title="Book One", author="Author A", genre=Genres.COMEDY, price=19.99, quantity=1),
+        Book(title="Book Two", author="Author B", genre=Genres.HORROR, price=25.99, quantity=3),
     ]
     for book in sample_books:
         books_dal.create_book(book)
@@ -26,4 +25,4 @@ def books(books_dal: BookDataAccessLayer) -> list[Book]:
 
 @pytest.fixture(scope="module")
 def create_book_request() -> BookCreate:
-    return BookCreate(title="Test Book", author="Test Author", genre="Drama", price=12.99, quantity=3)
+    return BookCreate(title="Test Book", author="Test Author", genre=Genres.FANTASY, price=12.99, quantity=3)

@@ -1,6 +1,7 @@
 from .dal import BookDataAccessLayer
 from .exceptions import BookNotFoundException, InvalidBookDataException
 from .models import Book, BookCreate, BookUpdate
+from .constants import Genres
 
 __all__ = [
     "Book",
@@ -9,4 +10,5 @@ __all__ = [
     "BookDataAccessLayer",
     "InvalidBookDataException",
     "BookNotFoundException",
+    "Genres",
 ]
