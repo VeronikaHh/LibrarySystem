@@ -1,0 +1,20 @@
+[tool.ruff]
+line-length = 121
+lint.select = [
+    "Q", "E", "W", "F", "C", "SIM", "N", "PIE", "T", "Q", "BLE", "PTH", "ARG",
+    "INT", "TCH", "RET", "RSE", "PYI", "T20", "DTZ", "COM", "ASYNC", "ANN"
+]
+lint.ignore = ["RET505", "N818"]
+include = ["*.py"]
+exclude = [
+    ".git", ".github", "__pycache__", ".cache", "*venv*", "test*", "alembic"
+]
+target-version = "py313"
+lint.fixable = ["COM812", "W292", "F401"]
+
+[tool.pytest.ini_options]
+#addopts = "-p no:warnings"
+filterwarnings = [
+#    "ignore:.*Expected `enum` but got `str`.*:UserWarning:pydantic\\.type_adapter"
+    "ignore::UserWarning:pydantic\\.type_adapter",
+]

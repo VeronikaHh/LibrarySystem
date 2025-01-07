@@ -44,7 +44,7 @@ def test_update_order(orders_dal: OrderDataAccessLayer, orders: list[Order]) -> 
         order_id=orders[0].order_id,
         order=OrderUpdate(is_returned=True),
     )
-    assert updated_order.is_returned == True
+    assert updated_order.is_returned
 
 
 def test_delete_order(orders_dal: OrderDataAccessLayer, orders: list[Order]) -> None:

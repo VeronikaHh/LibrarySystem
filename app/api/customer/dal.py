@@ -11,12 +11,11 @@ from .models import Customer, CustomerCreate, CustomerUpdate
 
 
 class CustomerDataAccessLayer:
-    def __init__(self, session: Annotated[Session, Depends(get_database_session)]):
+    def __init__(self, session: Annotated[Session, Depends(get_database_session)]) -> None:
         self.__session = session
 
     def get_all_customers(self) -> Sequence[Customer]:
-        db_customers = self.__session.exec(select(Customer)).all()
-        return db_customers
+        return self.__session.exec(select(Customer)).all()
 
     def get_customer_by_id(self, customer_id: uuid.UUID) -> Customer:
         statement = select(Customer).where(Customer.customer_id == customer_id)
@@ -52,4 +51,3 @@ class CustomerDataAccessLayer:
             self.__session.commit()
         except IntegrityError as err:
             raise InvalidCustomerDataException(customer_id=customer_id, error=str(err))
-        return None

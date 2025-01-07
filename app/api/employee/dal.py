@@ -11,12 +11,11 @@ from .models import Employee, EmployeeCreate, EmployeeUpdate
 
 
 class EmployeeDataAccessLayer:
-    def __init__(self, session: Annotated[Session, Depends(get_database_session)]):
+    def __init__(self, session: Annotated[Session, Depends(get_database_session)]) -> None:
         self.__session = session
 
     def get_all_employees(self) -> Sequence[Employee]:
-        db_employees = self.__session.exec(select(Employee)).all()
-        return db_employees
+        return self.__session.exec(select(Employee)).all()
 
     def get_employee_by_id(self, employee_id: uuid.UUID) -> Employee:
         statement = select(Employee).where(Employee.employee_id == employee_id)
@@ -52,4 +51,3 @@ class EmployeeDataAccessLayer:
             self.__session.commit()
         except IntegrityError as err:
             raise InvalidEmployeeDataException(employee_id=employee_id, error=str(err))
-        return None

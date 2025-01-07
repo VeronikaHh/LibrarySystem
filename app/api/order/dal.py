@@ -11,12 +11,11 @@ from .models import Order, OrderCreate, OrderUpdate
 
 
 class OrderDataAccessLayer:
-    def __init__(self, session: Annotated[Session, Depends(get_database_session)]):
+    def __init__(self, session: Annotated[Session, Depends(get_database_session)]) -> None:
         self.__session = session
 
     def get_all_orders(self) -> Sequence[Order]:
-        db_orders = self.__session.exec(select(Order)).all()
-        return db_orders
+        return self.__session.exec(select(Order)).all()
 
     def get_order_by_id(self, order_id: uuid.UUID) -> Order:
         statement = select(Order).where(Order.order_id == order_id)
@@ -52,4 +51,3 @@ class OrderDataAccessLayer:
             self.__session.commit()
         except IntegrityError as err:
             raise InvalidOrderDataException(order_id=order_id, error=str(err))
-        return None
