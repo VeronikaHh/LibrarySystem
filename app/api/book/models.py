@@ -1,12 +1,15 @@
 import uuid
 
+from sqlalchemy import Column, VARCHAR
 from sqlmodel import Field, SQLModel
+
+from app.api.book.constants import Genres
 
 
 class BookUpdate(SQLModel):
     title: str | None = None
     author: str | None = None
-    genre: str | None = None
+    genre: Genres | None = Field(sa_column=Column(VARCHAR, default=None))
     price: float | None = Field(default=None, ge=0)
     quantity: int | None = Field(default=None, ge=0)
 
@@ -14,7 +17,7 @@ class BookUpdate(SQLModel):
 class BookCreate(SQLModel):
     title: str = Field()
     author: str = Field()
-    genre: str = Field()
+    genre: Genres = Field(sa_column=Column(VARCHAR, nullable=False))
     price: float = Field(ge=0)
     quantity: int = Field(ge=0)
 
