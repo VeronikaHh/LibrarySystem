@@ -2,11 +2,12 @@ import uuid
 from typing import Annotated, Sequence
 
 from fastapi import Depends
+from pydantic_core import ValidationError
 from sqlalchemy.exc import IntegrityError
 from sqlmodel import Session, select
 
 from app.db_config import get_database_session
-from .exceptions import BookNotFoundException, InvalidBookDataException
+from .exceptions import BookNotFoundException, InvalidBookDataException, BookQuantityZeroException
 from .models import Book, BookCreate, BookUpdate
 
 
@@ -51,3 +52,21 @@ class BookDataAccessLayer:
             self.__session.commit()
         except IntegrityError as err:
             raise InvalidBookDataException(book_id=book_id, error=str(err))
+
+    def update_book_quantity(self, book_id: uuid.UUID, delta: int) -> Book:
+        db_book = self.get_book_by_id(book_id)
+        db_book.quantity += delta
+        self.__session.commit()
+        self.__session.refresh(db_book)
+        return db_book
+
+    def decrement_book_quantity(self, book_id: uuid.UUID) -> Book:
+        return self.update_book_quantity(book_id, -1)
+
+    def increment_book_quantity(self, book_id: uuid.UUID) -> Book:
+        return self.update_book_quantity(book_id, 1)
+
+    def check_available(self, book_id: uuid.UUID) -> None:
+        requested_book = self.get_book_by_id(book_id)
+        if not requested_book.quantity:
+            raise BookQuantityZeroException(book_id=book_id)
