@@ -4,6 +4,7 @@ from typing import Annotated
 from fastapi import APIRouter, Depends
 from fastapi import status
 
+from app.api.book import BookDataAccessLayer
 from .dal import OrderDataAccessLayer
 from .models import Order, OrderUpdate, OrderCreate
 
@@ -21,7 +22,12 @@ async def get_order_by_id(order_id: uuid.UUID, order_dal: Annotated[OrderDataAcc
 
 
 @router.post("", status_code=status.HTTP_201_CREATED)
-async def create_order(order: OrderCreate, order_dal: Annotated[OrderDataAccessLayer, Depends()]) -> Order:
+async def create_order(
+        order: OrderCreate,
+        order_dal: Annotated[OrderDataAccessLayer, Depends()],
+        book_dal: Annotated[BookDataAccessLayer, Depends()],
+) -> Order:
+    book_dal.decrement_book_quantity(order.book_id)
     return order_dal.create_order(order)
 
 

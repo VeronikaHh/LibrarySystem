@@ -2,7 +2,14 @@ import uuid
 
 import pytest
 
-from app.api.book import Book, BookUpdate, BookDataAccessLayer, BookNotFoundException, BookCreate
+from app.api.book import (
+    Book,
+    BookUpdate,
+    BookDataAccessLayer,
+    BookNotFoundException,
+    BookCreate,
+    BookQuantityZeroException,
+)
 
 
 def test_get_all_books(books_dal: BookDataAccessLayer, books: list[Book]) -> None:
@@ -38,6 +45,16 @@ def test_create_book(books_dal: BookDataAccessLayer, create_book_request: BookCr
 def test_update_book(books_dal: BookDataAccessLayer, books: list[Book]) -> None:
     updated_book = books_dal.update_book(book_id=books[0].book_id, book=BookUpdate(title="Updated title"))
     assert updated_book.title == "Updated title"
+
+
+def test_decrement_book_quantity(books_dal: BookDataAccessLayer, books: list[Book]) -> None:
+    updated_book = books_dal.decrement_book_quantity(books[0].book_id)
+    assert updated_book.quantity == books[0].quantity - 1
+
+
+def test_decrement_book_quantity_zero(books_dal: BookDataAccessLayer, books: list[Book]) -> None:
+    with pytest.raises(BookQuantityZeroException):
+        books_dal.decrement_book_quantity(books[0].book_id)
 
 
 def test_delete_book(books_dal: BookDataAccessLayer, books: list[Book]) -> None:
