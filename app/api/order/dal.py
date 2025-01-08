@@ -51,3 +51,10 @@ class OrderDataAccessLayer:
             self.__session.commit()
         except IntegrityError as err:
             raise InvalidOrderDataException(order_id=order_id, error=str(err))
+
+    def close_order(self, order_id: uuid.UUID) -> Order:
+        db_order = self.get_order_by_id(order_id)
+        db_order.is_returned = True
+        self.__session.commit()
+        self.__session.refresh(db_order)
+        return db_order

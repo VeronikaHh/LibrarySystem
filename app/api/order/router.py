@@ -45,3 +45,13 @@ async def update_order(
 @router.delete("/{order_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_order(order_id: uuid.UUID, order_dal: Annotated[OrderDataAccessLayer, Depends()]) -> None:
     return order_dal.delete_order(order_id)
+
+@router.patch("/{order_id}/close", status_code=status.HTTP_200_OK)
+async def close_order(
+        order_id: uuid.UUID,
+        order_dal: Annotated[OrderDataAccessLayer, Depends()],
+        book_dal: Annotated[BookDataAccessLayer, Depends()],
+) -> Order:
+    order = order_dal.close_order(order_id)
+    book_dal.increment_book_quantity(book_id=order.book_id)
+    return order

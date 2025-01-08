@@ -34,6 +34,21 @@ def orders(
         orders_dal.create_order(order)
     return sample_orders
 
+@pytest.fixture(scope="function")
+def order(
+        orders_dal: OrderDataAccessLayer,
+        books: list[Book],
+        customers: list[Customer],
+        employees: list[Employee],
+) -> Order:
+
+    order = Order(
+        customer_id=customers[0].customer_id,
+        book_id=books[0].book_id,
+        employee_id=employees[0].employee_id,
+    )
+    orders_dal.create_order(order)
+    return order
 
 @pytest.fixture(scope="module")
 def create_order_request(
