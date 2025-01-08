@@ -33,7 +33,14 @@ First step, installing dependencies:
 
 `pip install -r requirements.txt`
 
-Set up a database:
+Create `.env` file and then copy content of `.env.sample` to your file.
+Write your environmental variables in your `.env` file.
+
+Then run Postgres database in docker:
+
+`docker-compose up postgres`
+
+Run a migration(after setting up a database):
 
 `alembic upgrade head`
 
@@ -49,12 +56,6 @@ docker build -t library-management-api .
 docker run -p 8000:8000 library-management-api
 ```
 
-
 If you want to launch your API with Postgres database using docker-compose:
 
 `docker-compose up`
-
-If you want to run only Postgres database:
-
-`docker-compose up postgres`
-
