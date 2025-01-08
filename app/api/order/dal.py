@@ -31,7 +31,7 @@ class OrderDataAccessLayer:
             self.__session.commit()
             self.__session.refresh(db_order)
         except IntegrityError as err:
-            raise InvalidOrderDataException(order_id=order.order_id, error=str(err))
+            raise InvalidOrderDataException(order_id=db_order.order_id, error=str(err))
         return db_order
 
     def update_order(self, order_id: uuid.UUID, order: OrderUpdate) -> Order:

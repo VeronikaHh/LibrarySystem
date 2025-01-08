@@ -5,8 +5,8 @@ from app.api.book.router import router as book_router
 from app.api.customer.router import router as customer_router
 from app.api.employee.router import router as employee_router
 from app.api.order.router import router as order_router
-from .exception_handler import init_exception_handlers
-from .logger_config import logger
+from app.exception_handler import init_exception_handlers
+from app.logger_config import logger
 
 app = FastAPI()
 

@@ -27,8 +27,10 @@ async def create_order(
         order_dal: Annotated[OrderDataAccessLayer, Depends()],
         book_dal: Annotated[BookDataAccessLayer, Depends()],
 ) -> Order:
-    book_dal.decrement_book_quantity(order.book_id)
-    return order_dal.create_order(order)
+    book_dal.check_available(book_id=order.book_id)
+    created_order = order_dal.create_order(order)
+    book_dal.decrement_book_quantity(book_id=order.book_id)
+    return created_order
 
 
 @router.put("/{order_id}", status_code=status.HTTP_200_OK)

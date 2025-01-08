@@ -53,13 +53,20 @@ class BookDataAccessLayer:
         except IntegrityError as err:
             raise InvalidBookDataException(book_id=book_id, error=str(err))
 
-    def decrement_book_quantity(self, book_id: uuid.UUID) -> Book:
+    def update_book_quantity(self, book_id: uuid.UUID, delta: int) -> Book:
         db_book = self.get_book_by_id(book_id)
-        new_quantity = db_book.quantity - 1
-        try:
-            db_book.sqlmodel_update(BookUpdate(quantity=new_quantity).model_dump(exclude_none=True))
-            self.__session.commit()
-            self.__session.refresh(db_book)
-        except ValidationError as err:
-            raise BookQuantityZeroException(book_id=book_id, error=str(err))
+        db_book.quantity += delta
+        self.__session.commit()
+        self.__session.refresh(db_book)
         return db_book
+
+    def decrement_book_quantity(self, book_id: uuid.UUID) -> Book:
+        return self.update_book_quantity(book_id, -1)
+
+    def increment_book_quantity(self, book_id: uuid.UUID) -> Book:
+        return self.update_book_quantity(book_id, 1)
+
+    def check_available(self, book_id: uuid.UUID) -> None:
+        requested_book = self.get_book_by_id(book_id)
+        if not requested_book.quantity:
+            raise BookQuantityZeroException(book_id=book_id)

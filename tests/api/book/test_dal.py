@@ -14,7 +14,7 @@ from app.api.book import (
 
 def test_get_all_books(books_dal: BookDataAccessLayer, books: list[Book]) -> None:
     result = books_dal.get_all_books()
-    assert len(result) == 2
+    assert len(result) == len(books)
     for item in result:
         assert isinstance(item, Book)
 
@@ -47,17 +47,26 @@ def test_update_book(books_dal: BookDataAccessLayer, books: list[Book]) -> None:
     assert updated_book.title == "Updated title"
 
 
-def test_decrement_book_quantity(books_dal: BookDataAccessLayer, books: list[Book]) -> None:
-    updated_book = books_dal.decrement_book_quantity(books[0].book_id)
-    assert updated_book.quantity == books[0].quantity - 1
+def test_check_available(books_dal: BookDataAccessLayer, book_available: Book) -> None:
+    books_dal.check_available(book_available.book_id)
 
 
-def test_decrement_book_quantity_zero(books_dal: BookDataAccessLayer, books: list[Book]) -> None:
+def test_check_available_exception(books_dal: BookDataAccessLayer, book_unavailable: Book) -> None:
     with pytest.raises(BookQuantityZeroException):
-        books_dal.decrement_book_quantity(books[0].book_id)
+        books_dal.check_available(book_unavailable.book_id)
 
 
-def test_delete_book(books_dal: BookDataAccessLayer, books: list[Book]) -> None:
-    books_dal.delete_book(book_id=books[0].book_id)
+def test_increment_book_quantity(books_dal: BookDataAccessLayer, book_available: Book) -> None:
+    updated_book = books_dal.increment_book_quantity(book_available.book_id)
+    assert updated_book.quantity == book_available.quantity + 1
+
+
+def test_decrement_book_quantity(books_dal: BookDataAccessLayer, book_available: Book) -> None:
+    updated_book = books_dal.decrement_book_quantity(book_available.book_id)
+    assert updated_book.quantity == book_available.quantity - 1
+
+
+def test_delete_book(books_dal: BookDataAccessLayer, book_available: Book) -> None:
+    books_dal.delete_book(book_id=book_available.book_id)
     with pytest.raises(BookNotFoundException):
-        books_dal.get_book_by_id(books[0].book_id)
+        books_dal.get_book_by_id(book_available.book_id)
