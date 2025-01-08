@@ -34,7 +34,7 @@ def orders(
         orders_dal.create_order(order)
     return sample_orders
 
-@pytest.fixture(scope="module")
+@pytest.fixture(scope="function")
 def order(
         orders_dal: OrderDataAccessLayer,
         books: list[Book],

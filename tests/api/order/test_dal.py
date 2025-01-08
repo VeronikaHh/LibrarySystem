@@ -13,7 +13,7 @@ from app.api.order import (
 
 def test_get_all_orders(orders_dal: OrderDataAccessLayer, orders: list[Order]) -> None:
     result = orders_dal.get_all_orders()
-    assert len(result) == 2
+    assert len(result) == len(orders)
     for item in result:
         assert isinstance(item, Order)
 
