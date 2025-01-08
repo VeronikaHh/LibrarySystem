@@ -1,5 +1,5 @@
 fastapi==0.115.6
-pydantic_settings==2.7.0
+pydantic_settings==2.7.1
 pytest==8.3.4
 SQLAlchemy==2.0.36
 sqlmodel==0.0.22
