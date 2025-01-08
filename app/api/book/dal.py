@@ -2,7 +2,6 @@ import uuid
 from typing import Annotated, Sequence
 
 from fastapi import Depends
-from pydantic_core import ValidationError
 from sqlalchemy.exc import IntegrityError
 from sqlmodel import Session, select
 

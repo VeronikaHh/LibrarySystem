@@ -51,3 +51,7 @@ def test_delete_order(orders_dal: OrderDataAccessLayer, orders: list[Order]) -> 
     orders_dal.delete_order(order_id=orders[0].order_id)
     with pytest.raises(OrderNotFoundException):
         orders_dal.get_order_by_id(orders[0].order_id)
+
+def test_close_order(orders_dal: OrderDataAccessLayer, order: Order) -> None:
+    closed_order = orders_dal.close_order(order_id=order.order_id)
+    assert closed_order.is_returned == True
