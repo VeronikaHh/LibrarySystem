@@ -42,3 +42,29 @@ class InvalidCustomerDataException(CustomerException):
         if error:
             message = f"{message}, error = [{str(error)}]"
         super(CustomerException, self).__init__(message=message, status_code=status_code)
+
+class CustomerIsOwerException(CustomerException):
+    def __init__(
+            self,
+            customer_id: uuid.UUID,
+            message: str = "Customer is ower",
+            status_code: int = status.HTTP_400_BAD_REQUEST,
+            error: str | None = None,
+    ) -> None:
+        message = f"{message}, customer id = [{str(customer_id)}]"
+        if error:
+            message = f"{message}, error = [{str(error)}]"
+        super(CustomerException, self).__init__(message=message, status_code=status_code)
+
+class CustomerReachedOrderLimitException(CustomerException):
+    def __init__(
+            self,
+            customer_id: uuid.UUID,
+            message: str = "Customer has reached order limit (5 orders top)",
+            status_code: int = status.HTTP_400_BAD_REQUEST,
+            error: str | None = None,
+    ) -> None:
+        message = f"{message}, customer id = [{str(customer_id)}]"
+        if error:
+            message = f"{message}, error = [{str(error)}]"
+        super(CustomerException, self).__init__(message=message, status_code=status_code)

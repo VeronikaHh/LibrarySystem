@@ -1,5 +1,10 @@
 from .dal import CustomerDataAccessLayer
-from .exceptions import CustomerNotFoundException, InvalidCustomerDataException
+from .exceptions import (
+    CustomerNotFoundException,
+    InvalidCustomerDataException,
+    CustomerIsOwerException,
+    CustomerReachedOrderLimitException,
+)
 from .models import Customer, CustomerUpdate, CustomerCreate
 
 __all__ = [
@@ -9,4 +14,6 @@ __all__ = [
     "CustomerDataAccessLayer",
     "InvalidCustomerDataException",
     "CustomerNotFoundException",
+    "CustomerIsOwerException",
+    "CustomerReachedOrderLimitException",
 ]

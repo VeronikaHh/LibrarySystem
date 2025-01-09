@@ -7,6 +7,7 @@ from fastapi import status
 from app.api.book import BookDataAccessLayer
 from .dal import OrderDataAccessLayer
 from .models import Order, OrderUpdate, OrderCreate
+from app.api.customer import CustomerDataAccessLayer
 
 router = APIRouter(prefix="/orders", tags=["Order"])
 
@@ -26,7 +27,10 @@ async def create_order(
         order: OrderCreate,
         order_dal: Annotated[OrderDataAccessLayer, Depends()],
         book_dal: Annotated[BookDataAccessLayer, Depends()],
+        customer_dal: Annotated[CustomerDataAccessLayer, Depends()],
 ) -> Order:
+    customer_orders = order_dal.get_orders_for_customer(customer_id=order.customer_id, returned=False)
+    customer_dal.customer_check(customer_id=order.customer_id, orders_quantity=len(customer_orders))
     book_dal.check_available(book_id=order.book_id)
     created_order = order_dal.create_order(order)
     book_dal.decrement_book_quantity(book_id=order.book_id)
