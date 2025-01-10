@@ -63,5 +63,4 @@ class OrderDataAccessLayer:
         statement = select(Order).where(Order.customer_id == customer_id)
         if returned is not None:
             statement = statement.where(Order.is_returned == returned)
-        orders = self.__session.exec(statement).all()
-        return orders
+        return self.__session.exec(statement).all()

@@ -10,5 +10,5 @@ __all__ = [
     "OrderDataAccessLayer",
     "InvalidOrderDataException",
     "OrderNotFoundException",
-    "OrderService"
+    "OrderService",
 ]
