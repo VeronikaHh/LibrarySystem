@@ -1,10 +1,13 @@
 import pytest
 from sqlmodel import Session
 
-from app.api.order import Order, OrderCreate, OrderDataAccessLayer
 from app.api.book import Book
+from app.api.book import BookDataAccessLayer
 from app.api.customer import Customer
+from app.api.customer import CustomerDataAccessLayer
 from app.api.employee import Employee
+from app.api.order import Order, OrderCreate, OrderDataAccessLayer
+from app.api.order import OrderService
 
 
 @pytest.fixture(scope="session")
@@ -23,6 +26,15 @@ def orders(
         customers: list[Customer],
         employees: list[Employee],
 ) -> list[Order]:
+    old_orders = orders_dal.get_all_orders()
+    for order in old_orders:
+        orders_dal.delete_order(order.order_id)
+
+    # ------alternative way------
+    # statement = delete(Order)
+    # test_database_session.exec(statement)
+    # test_database_session.commit()
+
     sample_orders = [
         Order(
             customer_id=customers[i].customer_id,

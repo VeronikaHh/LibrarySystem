@@ -2,7 +2,7 @@ from typing import Iterable
 
 import pytest
 from fastapi.testclient import TestClient
-from sqlalchemy import Engine
+from sqlalchemy import Engine, text
 from sqlmodel import SQLModel, Session
 from testcontainers.postgres import PostgresContainer
 

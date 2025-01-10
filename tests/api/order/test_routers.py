@@ -51,10 +51,12 @@ def test_delete_order_not_exist(test_client: TestClient) -> None:
     response = test_client.delete(f"/orders/{order_id}")
     assert response.status_code == 404
 
+
 def test_close_order(test_client: TestClient, order: Order) -> None:
     order_id = order.order_id
     response = test_client.patch(f"/orders/{order_id}/close", json={})
     assert response.status_code == 200
+
 
 def test_close_order_not_exist(test_client: TestClient) -> None:
     order_id = uuid.uuid4()
