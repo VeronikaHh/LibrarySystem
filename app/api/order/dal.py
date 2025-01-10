@@ -66,7 +66,7 @@ class OrderDataAccessLayer:
             statement = statement.where(Order.is_returned == returned)
         try:
             orders = self.__session.exec(statement).all()
-        except IntegrityError as err:
+        except IntegrityError:
             raise CustomerNotFoundException(customer_id=customer_id)
         return orders
 
