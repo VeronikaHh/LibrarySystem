@@ -52,6 +52,28 @@ def test_delete_order(orders_dal: OrderDataAccessLayer, orders: list[Order]) -> 
     with pytest.raises(OrderNotFoundException):
         orders_dal.get_order_by_id(orders[0].order_id)
 
+
 def test_close_order(orders_dal: OrderDataAccessLayer, order: Order) -> None:
     closed_order = orders_dal.close_order(order_id=order.order_id)
     assert closed_order.is_returned == True
+
+# def test_get_orders_for_customer(orders_dal: OrderDataAccessLayer, orders: list[Order]) -> None:
+#     # Test getting all orders for a customer
+#     customer_id = orders[0].customer_id
+#     all_orders = orders_dal.get_orders_for_customer(customer_id)
+#     assert len(all_orders) == len([order for order in orders if order.customer_id == customer_id])
+#
+#     # Test getting only non-returned orders for a customer
+#     non_returned_orders = orders_dal.get_orders_for_customer(customer_id, returned=False)
+#     assert len(non_returned_orders) == len(
+#         [order for order in orders if order.customer_id == customer_id and not order.is_returned])
+#
+#     # Test getting only returned orders for a customer
+#     returned_orders = orders_dal.get_orders_for_customer(customer_id, returned=True)
+#     assert len(returned_orders) == len(
+#         [order for order in orders if order.customer_id == customer_id and order.is_returned])
+#
+#     # Test handling a non-existent customer
+#     non_existent_customer_id = uuid.uuid4()
+#     with pytest.raises(CustomerNotFoundException):
+#         orders_dal.get_orders_for_customer(non_existent_customer_id)
