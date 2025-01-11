@@ -39,8 +39,8 @@ def test_update_employee_not_exist(test_client: TestClient) -> None:
     assert response.status_code == 404
 
 
-def test_delete_employee(test_client: TestClient, employees: list[Employee]) -> None:
-    employee_id = employees[0].employee_id
+def test_delete_employee(test_client: TestClient, employee_without_orders: Employee) -> None:
+    employee_id = employee_without_orders.employee_id
     response = test_client.delete(f"/employees/{employee_id}")
     assert response.status_code == 204
 
