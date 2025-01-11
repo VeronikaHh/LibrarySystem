@@ -1,13 +1,10 @@
 import pytest
 from sqlmodel import Session
 
-from app.api.book import Book
-from app.api.book import BookDataAccessLayer
-from app.api.customer import Customer
-from app.api.customer import CustomerDataAccessLayer
+from app.api.book import Book, BookDataAccessLayer
+from app.api.customer import Customer, CustomerDataAccessLayer
 from app.api.employee import Employee
-from app.api.order import Order, OrderCreate, OrderDataAccessLayer
-from app.api.order import OrderService
+from app.api.order import Order, OrderCreate, OrderDataAccessLayer, OrderService
 
 
 @pytest.fixture(scope="session")
@@ -17,6 +14,7 @@ def orders_dal(
     return OrderDataAccessLayer(
         session=test_database_session,
     )
+
 
 @pytest.fixture(scope="session")
 def orders_service(
@@ -29,6 +27,7 @@ def orders_service(
         book_dal=books_dal,
         customer_dal=customers_dal,
     )
+
 
 @pytest.fixture(scope="module")
 def orders(
