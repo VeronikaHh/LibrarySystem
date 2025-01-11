@@ -8,7 +8,6 @@ from sqlmodel import Session, select
 from app.db_config import get_database_session
 from .exceptions import OrderNotFoundException, InvalidOrderDataException
 from .models import Order, OrderCreate, OrderUpdate
-from app.api.customer import CustomerNotFoundException
 
 
 class OrderDataAccessLayer:
@@ -64,10 +63,4 @@ class OrderDataAccessLayer:
         statement = select(Order).where(Order.customer_id == customer_id)
         if returned is not None:
             statement = statement.where(Order.is_returned == returned)
-        try:
-            orders = self.__session.exec(statement).all()
-        except IntegrityError as err:
-            raise CustomerNotFoundException(customer_id=customer_id)
-        return orders
-
-
+        return self.__session.exec(statement).all()
