@@ -13,7 +13,7 @@ from app.api.employee import (
 
 def test_get_all_employees(employees_dal: EmployeeDataAccessLayer, employees: list[Employee]) -> None:
     result = employees_dal.get_all_employees()
-    assert len(result) == 3
+    assert len(result) == len(employees)
     for item in result:
         assert isinstance(item, Employee)
 
@@ -47,7 +47,7 @@ def test_update_employee(employees_dal: EmployeeDataAccessLayer, employees: list
     assert updated_employee.email == "updated_email@mail.com"
 
 
-def test_delete_employee(employees_dal: EmployeeDataAccessLayer, employees: list[Employee]) -> None:
-    employees_dal.delete_employee(employee_id=employees[0].employee_id)
+def test_delete_employee(employees_dal: EmployeeDataAccessLayer, employee_without_orders: Employee) -> None:
+    employees_dal.delete_employee(employee_id=employee_without_orders.employee_id)
     with pytest.raises(EmployeeNotFoundException):
-        employees_dal.get_employee_by_id(employees[0].employee_id)
+        employees_dal.get_employee_by_id(employee_without_orders.employee_id)
