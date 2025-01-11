@@ -18,6 +18,17 @@ def orders_dal(
         session=test_database_session,
     )
 
+@pytest.fixture(scope="session")
+def orders_service(
+        orders_dal: OrderDataAccessLayer,
+        books_dal: BookDataAccessLayer,
+        customers_dal: CustomerDataAccessLayer,
+) -> OrderService:
+    return OrderService(
+        order_dal=orders_dal,
+        book_dal=books_dal,
+        customer_dal=customers_dal,
+    )
 
 @pytest.fixture(scope="module")
 def orders(
