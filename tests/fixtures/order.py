@@ -34,7 +34,7 @@ def orders(
         orders_dal: OrderDataAccessLayer,
         books: list[Book],
         customers: list[Customer],
-        employees: list[Employee],
+        employee_with_orders: Employee,
 ) -> list[Order]:
     old_orders = orders_dal.get_all_orders()
     for order in old_orders:
@@ -49,7 +49,7 @@ def orders(
         Order(
             customer_id=customers[i].customer_id,
             book_id=books[i].book_id,
-            employee_id=employees[i].employee_id,
+            employee_id=employee_with_orders.employee_id,
         ) for i in range(2)
     ]
     for order in sample_orders:
@@ -62,12 +62,12 @@ def order(
         orders_dal: OrderDataAccessLayer,
         books: list[Book],
         customers: list[Customer],
-        employees: list[Employee],
+        employee_with_orders: Employee,
 ) -> Order:
     order = Order(
         customer_id=customers[0].customer_id,
         book_id=books[0].book_id,
-        employee_id=employees[0].employee_id,
+        employee_id=employee_with_orders.employee_id,
     )
     orders_dal.create_order(order)
     return order
@@ -77,10 +77,10 @@ def order(
 def create_order_request(
         books: list[Book],
         customers: list[Customer],
-        employees: list[Employee],
+        employee_with_orders: Employee,
 ) -> OrderCreate:
     return OrderCreate(
         customer_id=customers[0].customer_id,
         book_id=books[1].book_id,
-        employee_id=employees[0].employee_id,
+        employee_id=employee_with_orders.employee_id,
     )

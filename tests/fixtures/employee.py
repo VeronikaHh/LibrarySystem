@@ -4,6 +4,7 @@ import pytest
 from sqlmodel import Session
 
 from app.api.employee import Employee, EmployeeDataAccessLayer, EmployeeCreate, EmployeeService
+from app.api.order import OrderDataAccessLayer
 
 
 @pytest.fixture(scope="session")
@@ -23,7 +24,10 @@ def employees_service(
 
 
 @pytest.fixture(scope="module")
-def employees(employees_dal: EmployeeDataAccessLayer) -> list[Employee]:
+def employees(
+        employees_dal: EmployeeDataAccessLayer,
+        orders_dal: OrderDataAccessLayer,
+) -> list[Employee]:
     old_employees = employees_dal.get_all_employees()
     for employee in old_employees:
         employees_dal.delete_employee(employee.employee_id)
@@ -56,6 +60,18 @@ def employees(employees_dal: EmployeeDataAccessLayer) -> list[Employee]:
     return sample_employees
 
 @pytest.fixture(scope="module")
+def employee_with_orders(employees_dal: EmployeeDataAccessLayer) -> Employee:
+    employee = Employee(
+        name="Employee with orders",
+        email=str(uuid.uuid4()),
+        phone_number=str(uuid.uuid4()),
+        address="Test Employee address",
+        is_admin=False,
+    )
+    employees_dal.create_employee(employee)
+    return employee
+
+@pytest.fixture(scope="module")
 def create_employee_request() -> EmployeeCreate:
     return EmployeeCreate(
         name="Test Employee",
@@ -66,7 +82,7 @@ def create_employee_request() -> EmployeeCreate:
     )
 
 
-@pytest.fixture(scope="module")
+@pytest.fixture(scope="function")
 def employee_without_orders(employees_dal: EmployeeDataAccessLayer) -> Employee:
     employee = Employee(
         name="Orderless Employee",
