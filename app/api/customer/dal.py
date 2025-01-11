@@ -9,8 +9,6 @@ from app.db_config import get_database_session
 from .exceptions import (
     CustomerNotFoundException,
     InvalidCustomerDataException,
-    CustomerIsOwerException,
-    CustomerReachedOrderLimitException,
 )
 from .models import Customer, CustomerCreate, CustomerUpdate
 

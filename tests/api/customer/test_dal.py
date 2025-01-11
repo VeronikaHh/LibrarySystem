@@ -54,17 +54,3 @@ def test_delete_customer(customers_dal: CustomerDataAccessLayer, customers: list
     customers_dal.delete_customer(customer_id=customers[0].customer_id)
     with pytest.raises(CustomerNotFoundException):
         customers_dal.get_customer_by_id(customers[0].customer_id)
-
-
-def test_customer_check(customers_dal: CustomerDataAccessLayer, customer: Customer) -> None:
-    customers_dal.customer_check(customer.customer_id, 3)
-
-
-def test_customer_check_is_ower(customers_dal: CustomerDataAccessLayer, customer_is_ower: Customer) -> None:
-    with pytest.raises(CustomerIsOwerException):
-        customers_dal.customer_check(customer_is_ower.customer_id, 3)
-
-
-def test_customer_check_reached_limit(customers_dal: CustomerDataAccessLayer, customer: Customer) -> None:
-    with pytest.raises(CustomerReachedOrderLimitException):
-        customers_dal.customer_check(customer.customer_id, 5)

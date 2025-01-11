@@ -6,6 +6,7 @@ from .exceptions import (
     CustomerReachedOrderLimitException,
 )
 from .models import Customer, CustomerUpdate, CustomerCreate
+from .service import CustomerService
 
 __all__ = [
     "Customer",
@@ -16,4 +17,5 @@ __all__ = [
     "CustomerNotFoundException",
     "CustomerIsOwerException",
     "CustomerReachedOrderLimitException",
+    "CustomerService",
 ]
