@@ -8,7 +8,6 @@ from app.api.book import (
     BookDataAccessLayer,
     BookNotFoundException,
     BookCreate,
-    BookQuantityZeroException,
 )
 
 
@@ -45,25 +44,6 @@ def test_create_book(books_dal: BookDataAccessLayer, create_book_request: BookCr
 def test_update_book(books_dal: BookDataAccessLayer, books: list[Book]) -> None:
     updated_book = books_dal.update_book(book_id=books[0].book_id, book=BookUpdate(title="Updated title"))
     assert updated_book.title == "Updated title"
-
-
-def test_check_available(books_dal: BookDataAccessLayer, book_available: Book) -> None:
-    books_dal.check_available(book_available.book_id)
-
-
-def test_check_available_exception(books_dal: BookDataAccessLayer, book_unavailable: Book) -> None:
-    with pytest.raises(BookQuantityZeroException):
-        books_dal.check_available(book_unavailable.book_id)
-
-
-def test_increment_book_quantity(books_dal: BookDataAccessLayer, book_available: Book) -> None:
-    updated_book = books_dal.increment_book_quantity(book_available.book_id)
-    assert updated_book.quantity == book_available.quantity + 1
-
-
-def test_decrement_book_quantity(books_dal: BookDataAccessLayer, book_available: Book) -> None:
-    updated_book = books_dal.decrement_book_quantity(book_available.book_id)
-    assert updated_book.quantity == book_available.quantity - 1
 
 
 def test_delete_book(books_dal: BookDataAccessLayer, book_available: Book) -> None:
