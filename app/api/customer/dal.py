@@ -9,8 +9,6 @@ from app.db_config import get_database_session
 from .exceptions import (
     CustomerNotFoundException,
     InvalidCustomerDataException,
-    CustomerIsOwerException,
-    CustomerReachedOrderLimitException,
 )
 from .models import Customer, CustomerCreate, CustomerUpdate
 
@@ -56,10 +54,3 @@ class CustomerDataAccessLayer:
             self.__session.commit()
         except IntegrityError as err:
             raise InvalidCustomerDataException(customer_id=customer_id, error=str(err))
-
-    def customer_check(self, customer_id: uuid.UUID, orders_quantity: int) -> None:
-        db_customer = self.get_customer_by_id(customer_id)
-        if db_customer.is_ower:
-            raise CustomerIsOwerException(customer_id=customer_id)
-        if orders_quantity == 5:
-            raise CustomerReachedOrderLimitException(customer_id=customer_id)

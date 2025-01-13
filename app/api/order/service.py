@@ -4,7 +4,7 @@ from typing import Annotated
 from fastapi import Depends
 
 from app.api.book import BookDataAccessLayer
-from app.api.customer import CustomerDataAccessLayer
+from app.api.customer import CustomerService
 from .dal import OrderDataAccessLayer
 from .models import Order, OrderUpdate, OrderCreate
 
@@ -14,11 +14,11 @@ class OrderService:
             self,
             order_dal: Annotated[OrderDataAccessLayer, Depends()],
             book_dal: Annotated[BookDataAccessLayer, Depends()],
-            customer_dal: Annotated[CustomerDataAccessLayer, Depends()],
+            customer_service: Annotated[CustomerService, Depends()],
     ) -> None:
         self.order_dal = order_dal
         self.book_dal = book_dal
-        self.customer_dal = customer_dal
+        self.customer_service = customer_service
 
     def get_all_orders(self) -> list[Order]:
         return list(self.order_dal.get_all_orders())
@@ -28,7 +28,7 @@ class OrderService:
 
     def create_order(self, order: OrderCreate) -> Order:
         customer_orders = self.order_dal.get_orders_for_customer(customer_id=order.customer_id, returned=False)
-        self.customer_dal.customer_check(customer_id=order.customer_id, orders_quantity=len(customer_orders))
+        self.customer_service.customer_check(customer_id=order.customer_id, orders_quantity=len(customer_orders))
         self.book_dal.check_available(book_id=order.book_id)
         created_order = self.order_dal.create_order(order)
         self.book_dal.decrement_book_quantity(book_id=order.book_id)
