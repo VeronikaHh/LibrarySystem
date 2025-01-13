@@ -12,7 +12,7 @@ router = APIRouter(prefix="/customers", tags=["Customer"])
 
 @router.get("", status_code=status.HTTP_200_OK)
 async def get_customers(customer_service: Annotated[CustomerService, Depends()]) -> list[Customer]:
-    return list(customer_service.get_all_customers())
+    return customer_service.get_all_customers()
 
 
 @router.get("/{customer_id}", status_code=status.HTTP_200_OK)
