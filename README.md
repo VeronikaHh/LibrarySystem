@@ -47,8 +47,11 @@ Run a migration(after setting up a database):
 Run server locally:
 `fastapi run` (run this command in LibrarySystem/app directory)
 
-Open your API docs on:
+Open Swager API docs:
 http://0.0.0.0:8000/docs
+
+Open FastApi documentation:
+http://0.0.0.0:8000/redoc
 
 If you want to run API as docker container:
 ```
