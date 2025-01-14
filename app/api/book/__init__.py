@@ -1,6 +1,11 @@
 from .constants import Genres
 from .dal import BookDataAccessLayer
-from .exceptions import BookNotFoundException, InvalidBookDataException, BookQuantityZeroException, BookDeleteException
+from .exceptions import (
+    BookNotFoundException,
+    InvalidBookDataException,
+    BookQuantityZeroException,
+    BookDeleteException,
+)
 from .models import Book, BookCreate, BookUpdate
 from .service import BookService
 
