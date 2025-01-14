@@ -6,7 +6,7 @@ from sqlalchemy.exc import IntegrityError
 from sqlmodel import Session, select
 
 from app.db_config import get_database_session
-from .exceptions import BookNotFoundException, InvalidBookDataException
+from .exceptions import BookNotFoundException, InvalidBookDataException, BookDeleteException
 from .models import Book, BookCreate, BookUpdate
 
 
@@ -50,4 +50,4 @@ class BookDataAccessLayer:
             self.__session.delete(db_book)
             self.__session.commit()
         except IntegrityError as err:
-            raise InvalidBookDataException(book_id=book_id, error=str(err))
+            raise BookDeleteException(book_id=book_id, error=str(err))

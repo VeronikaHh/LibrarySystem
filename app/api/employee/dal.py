@@ -6,7 +6,11 @@ from sqlalchemy.exc import IntegrityError
 from sqlmodel import Session, select
 
 from app.db_config import get_database_session
-from .exceptions import EmployeeNotFoundException, InvalidEmployeeDataException
+from .exceptions import (
+    EmployeeNotFoundException,
+    InvalidEmployeeDataException,
+    EmployeeDeleteException,
+)
 from .models import Employee, EmployeeCreate, EmployeeUpdate
 
 
@@ -50,4 +54,4 @@ class EmployeeDataAccessLayer:
             self.__session.delete(db_employee)
             self.__session.commit()
         except IntegrityError as err:
-            raise InvalidEmployeeDataException(employee_id=employee_id, error=str(err))
+            raise EmployeeDeleteException(employee_id=employee_id, error=str(err))

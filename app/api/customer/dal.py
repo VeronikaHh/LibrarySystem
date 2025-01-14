@@ -9,6 +9,7 @@ from app.db_config import get_database_session
 from .exceptions import (
     CustomerNotFoundException,
     InvalidCustomerDataException,
+    CustomerDeleteException,
 )
 from .models import Customer, CustomerCreate, CustomerUpdate
 
@@ -53,4 +54,4 @@ class CustomerDataAccessLayer:
             self.__session.delete(db_customer)
             self.__session.commit()
         except IntegrityError as err:
-            raise InvalidCustomerDataException(customer_id=customer_id, error=str(err))
+            raise CustomerDeleteException(customer_id=customer_id, error=str(err))

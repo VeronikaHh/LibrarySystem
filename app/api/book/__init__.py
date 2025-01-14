@@ -1,6 +1,6 @@
 from .constants import Genres
 from .dal import BookDataAccessLayer
-from .exceptions import BookNotFoundException, InvalidBookDataException, BookQuantityZeroException
+from .exceptions import BookNotFoundException, InvalidBookDataException, BookQuantityZeroException, BookDeleteException
 from .models import Book, BookCreate, BookUpdate
 from .service import BookService
 
@@ -14,4 +14,5 @@ __all__ = [
     "Genres",
     "BookQuantityZeroException",
     "BookService",
+    "BookDeleteException",
 ]
