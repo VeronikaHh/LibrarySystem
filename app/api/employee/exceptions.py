@@ -42,3 +42,17 @@ class InvalidEmployeeDataException(EmployeeException):
         if error:
             message = f"{message}, error = [{str(error)}]"
         super(EmployeeException, self).__init__(message=message, status_code=status_code)
+
+
+class EmployeeDeleteException(EmployeeException):
+    def __init__(
+            self,
+            employee_id: uuid.UUID,
+            message: str = "Employee cannot be deleted, there is orders for this employee",
+            status_code: int = status.HTTP_400_BAD_REQUEST,
+            error: str | None = None,
+    ) -> None:
+        message = f"{message}, employee id = [{str(employee_id)}]"
+        if error:
+            message = f"{message}, error = [{str(error)}]"
+        super(EmployeeException, self).__init__(message=message, status_code=status_code)

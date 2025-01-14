@@ -4,6 +4,7 @@ from .exceptions import (
     InvalidCustomerDataException,
     CustomerIsOwerException,
     CustomerReachedOrderLimitException,
+    CustomerDeleteException,
 )
 from .models import Customer, CustomerUpdate, CustomerCreate
 from .service import CustomerService
@@ -18,4 +19,5 @@ __all__ = [
     "CustomerIsOwerException",
     "CustomerReachedOrderLimitException",
     "CustomerService",
+    "CustomerDeleteException",
 ]

@@ -56,3 +56,16 @@ class BookQuantityZeroException(BookException):
         if error:
             message = f"{message}, error = [{str(error)}]"
         super(BookException, self).__init__(message=message, status_code=status_code)
+
+class BookDeleteException(BookException):
+    def __init__(
+            self,
+            book_id: uuid.UUID,
+            message: str = "Book cannot be deleted, there is orders for this book",
+            status_code: int = status.HTTP_400_BAD_REQUEST,
+            error: str | None = None,
+    ) -> None:
+        message = f"{message}, book id = [{str(book_id)}]"
+        if error:
+            message = f"{message}, error = [{str(error)}]"
+        super(BookException, self).__init__(message=message, status_code=status_code)
