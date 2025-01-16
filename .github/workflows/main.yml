@@ -47,7 +47,11 @@ jobs:
       # Step 4: Run Alembic Migrations on Railway
       - name: Run Alembic Migrations on Railway
         env:
-          DATABASE_URL: ${{ secrets.RAILWAY_DATABASE_URL }}
+          DATABASE_HOST: ${{ secrets.DATABASE_HOST }}
+          DATABASE_PORT: ${{ secrets.DATABASE_PORT }}
+          DATABASE_USER: ${{ secrets.DATABASE_USER }}
+          DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
+          DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
         run: |
           pip install alembic
           alembic upgrade head
