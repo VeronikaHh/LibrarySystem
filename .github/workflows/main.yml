@@ -44,23 +44,21 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      # Step 4: Install Alembic (and any other dependencies for migrations)
-      - name: Install Alembic
+      # Step 4: Run Alembic Migrations on Railway
+      - name: Run Alembic Migrations on Railway
+        env:
+          DATABASE_URL: ${{ secrets.RAILWAY_DATABASE_URL }}
         run: |
           pip install alembic
-
-      # Step 5: Run Alembic Migrations
-      - name: Run Alembic Migrations
-        run: |
           alembic upgrade head
 
-      # Step 4: Run Linting
+      # Step 5: Run Linting
       - name: Run Linter (ruff)
         run: |
           pip install ruff
           ruff check
 
-      # Step 5: Run Tests
+      # Step 6: Run Tests
       - name: Run Tests
         env:
           DATABASE_URL: postgres://testuser:testpassword@localhost:5433/testdb
@@ -68,7 +66,7 @@ jobs:
           pip install pytest pytest-asyncio httpx
           pytest
 
-      # Step 6: Build Application
+      # Step 7: Build Application
       - name: Build Application
         run: |
           uvicorn app.main:app --host 0.0.0.0 --port 8000 &
@@ -76,19 +74,19 @@ jobs:
           curl -f http://127.0.0.1:8000/docs || exit 1  # Check the server health
           pkill -f uvicorn  # Stop the server
 
-      # Step 7: Install Docker Compose
+      # Step 8: Install Docker Compose
       - name: Install Docker Compose
         run: |
           sudo curl -L "https://github.com/docker/compose/releases/download/$(curl -s https://api.github.com/repos/docker/compose/releases/latest | jq -r .tag_name)/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
           sudo chmod +x /usr/local/bin/docker-compose
           docker-compose --version
 
-      # Step 8: Add env file from github secret
+      # Step 9: Add env file from github secret
       - name: Create env file
         run: |
           echo "${{ secrets.ENV_FILE }}" > .env.deploy
           
-      # Step 9: Build Application with docker-compose
+      # Step 10: Build Application with docker-compose
       - name: Build docker-compose
         run: |
           docker-compose up --build -d  # Run containers in detached mode
