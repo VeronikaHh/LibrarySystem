@@ -73,7 +73,12 @@ jobs:
           sudo chmod +x /usr/local/bin/docker-compose
           docker-compose --version
 
-      # Step 8: Build Application with docker-compose
+      # Step 8: Add env file from github secret
+      - name: Create env file
+        run: |
+          echo "${{ secrets.ENV_FILE }}" > .env.deploy
+          
+      # Step 9: Build Application with docker-compose
       - name: Build docker-compose
         run: |
           docker-compose up --build -d  # Run containers in detached mode
