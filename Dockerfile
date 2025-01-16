@@ -11,4 +11,9 @@ COPY ./app /code/app
 
 # Expose port and run the application
 EXPOSE 8000
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+COPY ./alembic.ini /code/alembic.ini
+COPY ./alembic /code/alembic
+COPY ./run.sh /code/run.sh
+
+RUN chmod +x /code/run.sh
+CMD ["/code/run.sh"]
