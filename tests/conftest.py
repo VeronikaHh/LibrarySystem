@@ -20,11 +20,12 @@ def test_database_config(request: pytest.FixtureRequest) -> DatabaseConfig:
     request.addfinalizer(remove_containers)
 
     database_config = DatabaseConfig(
-        host=postgres.get_container_host_ip(),
-        port=postgres.get_exposed_port(5432),
-        username=postgres.username,
-        password=postgres.password,
-        database=postgres.dbname,
+        database_url=postgres.get_connection_url(),
+        # host=postgres.get_container_host_ip(),
+        # port=postgres.get_exposed_port(5432),
+        # username=postgres.username,
+        # password=postgres.password,
+        # database=postgres.dbname,
     )
 
     from app.db_config import get_database_engine
