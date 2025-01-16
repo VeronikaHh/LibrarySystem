@@ -22,12 +22,13 @@ DEFAULT_DB_DIALECT = "postgresql"
 
 
 class DatabaseConfig(BaseSettings):
-    host: str
-    port: int
-    username: str
-    password: str
-    database: str
-    dialect: str = DEFAULT_DB_DIALECT
+    # host: str
+    # port: int
+    # username: str
+    # password: str
+    # database: str
+    # dialect: str = DEFAULT_DB_DIALECT
+    database_url: str
 
     model_config = SettingsConfigDict(
         env_prefix=SERVICE_NAME + "DB_",
@@ -42,12 +43,13 @@ def get_database_config() -> DatabaseConfig:
 
 
 def get_connection_string(database_config: Annotated[DatabaseConfig, Depends(get_database_config)]) -> str:
-    return (
-        f"{database_config.dialect}://"
-        f"{database_config.username}:{database_config.password}@"
-        f"{database_config.host}:{database_config.port}/"
-        f"{database_config.database}"
-    )
+    # return (
+    #     f"{database_config.dialect}://"
+    #     f"{database_config.username}:{database_config.password}@"
+    #     f"{database_config.host}:{database_config.port}/"
+    #     f"{database_config.database}"
+    # )
+    return database_config.database_url
 
 
 def get_database_engine(database_config: Annotated[DatabaseConfig, Depends(get_database_config)]) -> Engine:

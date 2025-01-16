@@ -43,26 +43,6 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-          pip install alembic
-
-      - name: Load environment variables
-        run: |
-          echo "${{ secrets.DATABASE_HOST }}" > .env
-          echo "${{ secrets.DATABASE_PORT }}" >> .env
-          echo "${{ secrets.DATABASE_USER }}" >> .env
-          echo "${{ secrets.DATABASE_PASSWORD }}" >> .env
-          echo "${{ secrets.DATABASE_NAME }}" >> .env
-          echo "LIBRARY_MANAGEMENT_API_DB_HOST=${{ secrets.DATABASE_HOST }}" >> .env
-          echo "LIBRARY_MANAGEMENT_API_DB_PORT=${{ secrets.DATABASE_PORT }}" >> .env
-          echo "LIBRARY_MANAGEMENT_API_DB_USERNAME=${{ secrets.DATABASE_USER }}" >> .env
-          echo "LIBRARY_MANAGEMENT_API_DB_PASSWORD=${{ secrets.DATABASE_PASSWORD }}" >> .env
-          echo "LIBRARY_MANAGEMENT_API_DB_DATABASE=${{ secrets.DATABASE_NAME }}" >> .env
-          
-      - name: Debug environment variables
-        run: cat .env
-
-      - name: Run Alembic migrations
-        run: alembic upgrade head
 
       # Step 5: Run Linting
       - name: Run Linter (ruff)
