@@ -55,7 +55,7 @@ jobs:
         env:
           DATABASE_URL: postgres://testuser:testpassword@localhost:5433/testdb
         run: |
-          pip install pytest pytest-asyncio
+          pip install pytest pytest-asyncio httpx
           pytest
 
       # Step 6: Build Application
