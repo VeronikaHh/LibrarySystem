@@ -56,7 +56,7 @@ jobs:
           DATABASE_URL: postgres://testuser:testpassword@localhost:5433/testdb
         run: |
           pip install pytest pytest-asyncio
-          pytest tests
+          pytest
 
       # Step 6: Build Application
       - name: Build Application
