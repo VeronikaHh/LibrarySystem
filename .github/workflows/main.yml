@@ -47,11 +47,19 @@ jobs:
 
       - name: Load environment variables
         run: |
-          echo "DATABASE_HOST=${{ secrets.DATABASE_HOST }}" >> .env
-          echo "DATABASE_PORT=${{ secrets.DATABASE_PORT }}" >> .env
-          echo "DATABASE_USER=${{ secrets.DATABASE_USER }}" >> .env
-          echo "DATABASE_PASSWORD=${{ secrets.DATABASE_PASSWORD }}" >> .env
-          echo "DATABASE_NAME=${{ secrets.DATABASE_NAME }}" >> .env
+          echo "${{ secrets.DATABASE_HOST }}" > .env
+          echo "${{ secrets.DATABASE_PORT }}" >> .env
+          echo "${{ secrets.DATABASE_USER }}" >> .env
+          echo "${{ secrets.DATABASE_PASSWORD }}" >> .env
+          echo "${{ secrets.DATABASE_NAME }}" >> .env
+          echo "LIBRARY_MANAGEMENT_API_DB_HOST=${{ secrets.DATABASE_HOST }}" >> .env
+          echo "LIBRARY_MANAGEMENT_API_DB_PORT=${{ secrets.DATABASE_PORT }}" >> .env
+          echo "LIBRARY_MANAGEMENT_API_DB_USERNAME=${{ secrets.DATABASE_USER }}" >> .env
+          echo "LIBRARY_MANAGEMENT_API_DB_PASSWORD=${{ secrets.DATABASE_PASSWORD }}" >> .env
+          echo "LIBRARY_MANAGEMENT_API_DB_DATABASE=${{ secrets.DATABASE_NAME }}" >> .env
+          
+      - name: Debug environment variables
+        run: cat .env
 
       - name: Run Alembic migrations
         run: alembic upgrade head
