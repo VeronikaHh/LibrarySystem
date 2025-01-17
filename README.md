@@ -23,13 +23,13 @@ Built-in API documentation using Swagger UI for easy API exploration.
 ## Technologies Used
 - FastAPI: For building the API.
 - SQLAlchemy: For database interactions.
-- PostgreSQL: As the database backend.
+- PostgreSQL: As the relational database.
 - Docker: For containerized deployment.
 - Ruff: As a linter.
-- Alembic: For auto-generating database migrations.
+- Alembic: For database migrations management.
 - Pytest: For testing.
-- GitHub actions for CI.
-- Railway for CD (https://railway.com/).
+- GitHub actions: For CI.
+- Railway(https://railway.com/): For CD.
 ## Installation Steps
 First step, installing dependencies:
 
