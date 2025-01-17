@@ -1,7 +1,7 @@
 # LibrarySystem
 
 ## Description:
-The Library Management System is an efficient web application designed to streamline the management of library
+The Library Management System is an efficient REST API application designed to streamline the management of library
 resources. This project leverages the high-performance FastAPI framework to provide a fast and modern API
 interface for handling various library operations.
 
@@ -23,11 +23,13 @@ Built-in API documentation using Swagger UI for easy API exploration.
 ## Technologies Used
 - FastAPI: For building the API.
 - SQLAlchemy: For database interactions.
-- PostgreSQL: As the database backend.
+- PostgreSQL: As the relational database.
 - Docker: For containerized deployment.
 - Ruff: As a linter.
-- Alembic: For auto-generating database migrations.
+- Alembic: For database migrations management.
 - Pytest: For testing.
+- GitHub actions: For CI.
+- Railway(https://railway.com/): For CD.
 ## Installation Steps
 First step, installing dependencies:
 
@@ -52,6 +54,8 @@ http://0.0.0.0:8000/docs
 
 Open FastApi documentation:
 http://0.0.0.0:8000/redoc
+
+Deployed app: https://librarysystem-production-dd60.up.railway.app/docs#/
 
 If you want to run API as docker container:
 ```
