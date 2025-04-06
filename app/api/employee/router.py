@@ -4,14 +4,14 @@ from typing import Annotated
 from fastapi import APIRouter, Depends
 from fastapi import status
 
-from .models import Employee, EmployeeCreate, EmployeeUpdate
+from .models import EmployeeCreate, EmployeeUpdate, EmployeeResponse
 from .service import EmployeeService
 
 router = APIRouter(prefix="/employees", tags=["Employee"])
 
 
 @router.get("", status_code=status.HTTP_200_OK)
-async def get_employees(employee_service: Annotated[EmployeeService, Depends()]) -> list[Employee]:
+async def get_employees(employee_service: Annotated[EmployeeService, Depends()]) -> list[EmployeeResponse]:
     return employee_service.get_all_employees()
 
 
@@ -19,7 +19,7 @@ async def get_employees(employee_service: Annotated[EmployeeService, Depends()])
 async def get_employee_by_id(
         employee_id: uuid.UUID,
         employee_service: Annotated[EmployeeService, Depends()],
-) -> Employee:
+) -> EmployeeResponse:
     return employee_service.get_employee_by_id(employee_id=employee_id)
 
 
@@ -27,7 +27,7 @@ async def get_employee_by_id(
 async def create_employee(
         employee: EmployeeCreate,
         employee_service: Annotated[EmployeeService, Depends()],
-) -> Employee:
+) -> EmployeeResponse:
     return employee_service.create_employee(employee=employee)
 
 
@@ -36,7 +36,7 @@ async def update_employee(
         employee_id: uuid.UUID,
         employee: EmployeeUpdate,
         employee_service: Annotated[EmployeeService, Depends()],
-) -> Employee:
+) -> EmployeeResponse:
     return employee_service.update_employee(employee_id=employee_id, employee=employee)
 
 

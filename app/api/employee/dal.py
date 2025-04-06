@@ -11,7 +11,7 @@ from .exceptions import (
     InvalidEmployeeDataException,
     EmployeeDeleteException,
 )
-from .models import Employee, EmployeeCreate, EmployeeUpdate
+from .models import Employee, EmployeeCreate, EmployeeUpdate, EmployeeResponse
 
 
 class EmployeeDataAccessLayer:
@@ -29,7 +29,12 @@ class EmployeeDataAccessLayer:
         return db_employee
 
     def create_employee(self, employee: EmployeeCreate) -> Employee:
-        db_employee = Employee(**employee.model_dump())
+        # Create employee WITHOUT password first
+        employee_data = employee.model_dump(exclude={"password"})
+        db_employee = Employee(**employee_data)
+
+        # Set the hashed password separately
+        db_employee.set_password(employee.password)
         try:
             self.__session.add(db_employee)
             self.__session.commit()
@@ -55,3 +60,13 @@ class EmployeeDataAccessLayer:
             self.__session.commit()
         except IntegrityError as err:
             raise EmployeeDeleteException(employee_id=employee_id, error=str(err))
+
+    def update_password(self, employee_id: uuid.UUID, new_password: str) -> EmployeeResponse:
+        db_employee = self.get_employee_by_id(employee_id)
+        db_employee.set_password(new_password)
+        try:
+            self.__session.commit()
+            self.__session.refresh(db_employee)
+        except IntegrityError as err:
+            raise InvalidEmployeeDataException(employee_id=employee_id, error=str(err))
+        return EmployeeResponse(**db_employee.model_dump())

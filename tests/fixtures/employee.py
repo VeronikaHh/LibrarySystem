@@ -3,7 +3,7 @@ import uuid
 import pytest
 from sqlmodel import Session
 
-from app.api.employee import Employee, EmployeeDataAccessLayer, EmployeeCreate, EmployeeService
+from app.api.employee import Employee, EmployeeDataAccessLayer, EmployeeCreate, EmployeeService, EmployeeResponse
 from app.api.order import OrderDataAccessLayer
 
 
@@ -33,43 +33,47 @@ def employees(
         employees_dal.delete_employee(employee.employee_id)
 
     sample_employees = [
-        Employee(
+        EmployeeCreate(
             name="Admin Employee",
             email=str(uuid.uuid4()),
             phone_number=str(uuid.uuid4()),
             address="Employee One address",
             is_admin=True,
+            password="password",
         ),
-        Employee(
+        EmployeeCreate(
             name="Employee One",
             email=str(uuid.uuid4()),
             phone_number=str(uuid.uuid4()),
             address="Employee One address",
             is_admin=False,
+            password="password",
         ),
-        Employee(
+        EmployeeCreate(
             name="Employee Two",
             email=str(uuid.uuid4()),
             phone_number=str(uuid.uuid4()),
             address="Employee One address",
             is_admin=False,
+            password="password",
         ),
     ]
+    created_employees = []
     for employee in sample_employees:
-        employees_dal.create_employee(employee)
-    return sample_employees
+        created_employees.append(employees_dal.create_employee(employee))
+    return created_employees
 
 @pytest.fixture(scope="module")
 def employee_with_orders(employees_dal: EmployeeDataAccessLayer) -> Employee:
-    employee = Employee(
+    employee = EmployeeCreate(
         name="Employee with orders",
         email=str(uuid.uuid4()),
         phone_number=str(uuid.uuid4()),
         address="Test Employee address",
         is_admin=False,
+        password="password",
     )
-    employees_dal.create_employee(employee)
-    return employee
+    return employees_dal.create_employee(employee)
 
 @pytest.fixture(scope="module")
 def create_employee_request() -> EmployeeCreate:
@@ -79,17 +83,18 @@ def create_employee_request() -> EmployeeCreate:
         phone_number=str(uuid.uuid4()),
         address="Test Employee address",
         is_admin=False,
+        password="password",
     )
 
 
 @pytest.fixture(scope="function")
 def employee_without_orders(employees_dal: EmployeeDataAccessLayer) -> Employee:
-    employee = Employee(
+    employee = EmployeeCreate(
         name="Orderless Employee",
         email=str(uuid.uuid4()),
         phone_number=str(uuid.uuid4()),
         address="Test Employee address",
         is_admin=False,
+        password="password",
     )
-    employees_dal.create_employee(employee)
-    return employee
+    return employees_dal.create_employee(employee)

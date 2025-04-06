@@ -8,6 +8,7 @@ from app.api.employee import (
     EmployeeService,
     EmployeeNotFoundException,
     EmployeeCreate,
+    EmployeeResponse,
 )
 
 
@@ -15,13 +16,13 @@ def test_get_all_employees(employees_service: EmployeeService, employees: list[E
     result = employees_service.get_all_employees()
     assert len(result) == len(employees)
     for item in result:
-        assert isinstance(item, Employee)
+        assert isinstance(item, EmployeeResponse)
 
 
 def test_get_employee_by_id(employees_service: EmployeeService, employees: list[Employee]) -> None:
     retrieved_employee = employees_service.get_employee_by_id(employees[0].employee_id)
     assert retrieved_employee is not None
-    assert isinstance(retrieved_employee, Employee)
+    assert isinstance(retrieved_employee, EmployeeResponse)
     assert retrieved_employee.name == employees[0].name
     assert retrieved_employee.email == employees[0].email
     assert retrieved_employee.phone_number == employees[0].phone_number
@@ -42,9 +43,9 @@ def test_create_employee(employees_service: EmployeeService, create_employee_req
 def test_update_employee(employees_service: EmployeeService, employees: list[Employee]) -> None:
     updated_employee = employees_service.update_employee(
         employee_id=employees[0].employee_id,
-        employee=EmployeeUpdate(email="updated_email@mail.com"),
+        employee=EmployeeUpdate(address="updated address"),
     )
-    assert updated_employee.email == "updated_email@mail.com"
+    assert updated_employee.address == "updated address"
 
 
 def test_delete_employee(employees_service: EmployeeService, employee_without_orders: Employee) -> None:
