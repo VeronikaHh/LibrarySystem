@@ -18,19 +18,17 @@ class EmployeeDataAccessLayer:
     def __init__(self, session: Annotated[Session, Depends(get_database_session)]) -> None:
         self.__session = session
 
-    def get_all_employees(self) -> Sequence[EmployeeResponse]:
-        employees = self.__session.exec(select(Employee)).all()
-        # return [EmployeeResponse.model_validate(emp) for emp in employees]
-        return [EmployeeResponse(**emp.model_dump()) for emp in employees]
+    def get_all_employees(self) -> Sequence[Employee]:
+        return self.__session.exec(select(Employee)).all()
 
-    def get_employee_by_id(self, employee_id: uuid.UUID) -> EmployeeResponse:
+    def get_employee_by_id(self, employee_id: uuid.UUID) -> Employee:
         statement = select(Employee).where(Employee.employee_id == employee_id)
         db_employee = self.__session.exec(statement).one_or_none()
         if db_employee is None:
             raise EmployeeNotFoundException(employee_id=employee_id)
-        return EmployeeResponse(**db_employee.model_dump())
+        return db_employee
 
-    def create_employee(self, employee: EmployeeCreate) -> EmployeeResponse:
+    def create_employee(self, employee: EmployeeCreate) -> Employee:
         # Create employee WITHOUT password first
         employee_data = employee.model_dump(exclude={"password"})
         db_employee = Employee(**employee_data)
@@ -43,9 +41,9 @@ class EmployeeDataAccessLayer:
             self.__session.refresh(db_employee)
         except IntegrityError as err:
             raise InvalidEmployeeDataException(employee_id=employee.employee_id, error=str(err))
-        return EmployeeResponse(**db_employee.model_dump())
+        return db_employee
 
-    def update_employee(self, employee_id: uuid.UUID, employee: EmployeeUpdate) -> EmployeeResponse:
+    def update_employee(self, employee_id: uuid.UUID, employee: EmployeeUpdate) -> Employee:
         db_employee = self.get_employee_by_id(employee_id)
         try:
             db_employee.sqlmodel_update(employee.model_dump(exclude_none=True))
@@ -53,7 +51,7 @@ class EmployeeDataAccessLayer:
             self.__session.refresh(db_employee)
         except IntegrityError as err:
             raise InvalidEmployeeDataException(employee_id=employee_id, error=str(err))
-        return EmployeeResponse(**db_employee.model_dump())
+        return db_employee
 
     def delete_employee(self, employee_id: uuid.UUID) -> None:
         db_employee = self.get_employee_by_id(employee_id)
