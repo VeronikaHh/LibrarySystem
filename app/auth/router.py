@@ -1,17 +1,20 @@
-from fastapi import APIRouter, Depends, HTTPException, status
-from fastapi.security import OAuth2PasswordRequestForm
 from typing import Annotated
 
+from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi.security import OAuth2PasswordRequestForm
+from sqlmodel import Session
+
+from app.api.employee.models import Employee
+from app.db_config import get_database_session
 from .auth import (
     authenticate_employee,
     create_access_token,
+    create_refresh_token,
     get_current_active_user,
+    get_current_user_from_refresh_token,
     Token,
     User,
 )
-from app.db_config import get_database_session
-from app.api.employee.models import Employee
-from sqlmodel import Session
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
@@ -29,7 +32,6 @@ async def login_for_access_token(
             headers={"WWW-Authenticate": "Bearer"},
         )
 
-    # Determine scopes based on admin status
     scopes = ["admin"] if employee.is_admin else ["employee"]
 
     access_token = create_access_token(
@@ -39,7 +41,43 @@ async def login_for_access_token(
             "scopes": scopes,
         },
     )
-    return Token(access_token=access_token, token_type="bearer")
+
+    refresh_token = create_refresh_token(
+        data={"sub": employee.email},
+    )
+
+    return Token(
+        access_token=access_token,
+        token_type="bearer",
+        refresh_token=refresh_token,
+    )
+
+
+@router.post("/refresh-token", response_model=Token)
+async def refresh_access_token(
+        refresh_token: str,
+        db: Annotated[Session, Depends(get_database_session)],
+) -> Token:
+    employee = await get_current_user_from_refresh_token(refresh_token, db)
+
+    scopes = ["admin"] if employee.is_admin else ["employee"]
+
+    new_access_token = create_access_token(
+        data={
+            "sub": employee.email,
+            "is_admin": employee.is_admin,
+            "scopes": scopes,
+        },
+    )
+
+    # Optionally rotate refresh token (uncomment if you want to issue new refresh token)
+    # new_refresh_token = create_refresh_token(data={"sub": employee.email})
+
+    return Token(
+        access_token=new_access_token,
+        token_type="bearer",
+        refresh_token=refresh_token,  # Or new_refresh_token if rotating
+    )
 
 
 @router.get("/me", response_model=User)
@@ -49,13 +87,4 @@ async def read_users_me(
     return User(
         email=current_user.email,
         is_admin=current_user.is_admin,
-        # disabled=False  # Add this field if you implement user status
     )
-
-
-# @router.post("/refresh-token")
-# async def refresh_token(
-#         current_user: Annotated[Employee, Depends(get_current_active_user)]
-# ):
-#     # Implement token refresh logic if needed
-#     pass
