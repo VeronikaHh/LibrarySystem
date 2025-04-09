@@ -33,6 +33,7 @@ class Token(BaseModel):
     """Response model for access tokens"""
     access_token: str
     token_type: str
+    refresh_token: str
 
 
 class TokenData(BaseModel):
@@ -94,6 +95,37 @@ def create_access_token(
         auth_config.secret_key,
         algorithm=auth_config.algorithm,
     )
+
+
+def create_refresh_token(
+        data: dict,
+        expires_delta: Optional[timedelta] = None,
+) -> str:
+    """Generate a refresh JWT token"""
+    to_encode = data.copy()
+    expire = datetime.now(timezone.utc) + (
+            expires_delta or timedelta(days=auth_config.refresh_token_expire_days)
+    )
+    to_encode.update({"exp": expire})
+    return jwt.encode(
+        to_encode,
+        auth_config.refresh_token_secret_key,  # Use separate key for refresh tokens
+        algorithm=auth_config.algorithm,
+    )
+
+
+def verify_refresh_token(token: str) -> Optional[str]:
+    """Verify a refresh token and return the email if valid"""
+    try:
+        payload = jwt.decode(
+            token,
+            auth_config.refresh_token_secret_key,
+            algorithms=[auth_config.algorithm],
+        )
+        email: str = payload.get("sub")
+        return email
+    except JWTError:
+        return None
 
 
 # ---------- Dependency Functions ----------
@@ -171,3 +203,25 @@ async def validate_token(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid token",
         )
+
+
+async def get_current_user_from_refresh_token(
+        token: str,
+        db: Session,
+) -> Employee:
+    """Get user from refresh token"""
+    credentials_exception = HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Could not validate credentials",
+        headers={"WWW-Authenticate": "Bearer"},
+    )
+
+    email = verify_refresh_token(token)
+    if not email:
+        raise credentials_exception
+
+    employee = get_employee(db, email=email)
+    if employee is None:
+        raise credentials_exception
+
+    return employee
